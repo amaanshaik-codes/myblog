@@ -44,8 +44,16 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Lora:wght@400;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
-  <body{% if layout == 'layouts/post.njk' %} class="is-post-page"{% endif %}>
+  <body class="{% if layoutClass %}{{ layoutClass }}{% endif %}{% if layout == 'layouts/post.njk' %} is-post-page{% endif %}">
     <a href="#content" class="skip-link">Skip to content</a>
+
+    {% if page.url and page.url.substring(0,6) == '/blog/' %}
+      <a href="{% if page.url == '/blog/' %}/{% else %}/blog/{% endif %}" class="back-button" aria-label="Go back">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </a>
+    {% endif %}
 
     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
       <span class="theme-icon"></span>

@@ -4,25 +4,9 @@ title: Home
 description: A minimal blog.
 ---
 
-<ul class="post-list">
-  {%- for post in collections.posts | reverse -%}
-    <li class="post-item">
-      <a href="{{ post.url }}" class="post-card-link">
-        <figure class="post-thumb-wrapper">
-          <img 
-            src="{{ post.data.image }}" 
-            alt="" 
-            class="post-thumb" 
-            loading="lazy"
-            onerror="this.style.display='none'; this.parentElement.classList.add('no-image');"
-          />
-        </figure>
-        <div class="post-content-wrapper">
-          <h2 class="post-title">{{ post.data.title }}</h2>
-          {% if post.date %}<p class="post-meta">{{ post.date | readableDate }}</p>{% endif %}
-          <p class="post-excerpt">{{ post.templateContent | excerpt(200) }}</p>
-        </div>
-      </a>
-    </li>
-  {%- endfor -%}
-</ul>
+<nav class="home-nav">
+  <a href="/blog/" class="nav-link">
+    <span class="nav-icon">→</span>
+    <span class="nav-text">Read the blog</span>
+  </a>
+</nav>

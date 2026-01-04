@@ -30,16 +30,57 @@ function parseDateFromText(text) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+// Convert Roman numerals to Arabic numbers
+function romanToNumber(roman) {
+  const romanMap = {
+    I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000
+  };
+  const str = String(roman).toUpperCase().trim();
+  let result = 0;
+  for (let i = 0; i < str.length; i++) {
+    const current = romanMap[str[i]] || 0;
+    const next = romanMap[str[i + 1]] || 0;
+    if (current < next) {
+      result -= current;
+    } else {
+      result += current;
+    }
+  }
+  return result || null;
+}
+
+// Extract post number from input path (folder name like I, II, III, IV, V...)
+function getPostNumberFromPath(inputPath) {
+  if (!inputPath) return 1;
+  const normalized = String(inputPath).replace(/\\/g, "/");
+  const match = normalized.match(/content\/posts\/([^/]+)\//);
+  if (match && match[1]) {
+    const folderName = match[1];
+    // Try Roman numeral first
+    const num = romanToNumber(folderName);
+    if (num) return num;
+    // Try plain number
+    const parsed = parseInt(folderName, 10);
+    if (!isNaN(parsed)) return parsed;
+  }
+  return 1;
+}
+
 module.exports = {
   layout: "layouts/post.njk",
   tags: ["posts"],
 
-  permalink: (data) => {
-    const slug = data.page?.fileSlug || "post";
-    return `/posts/${slug}/`;
-  },
-
   eleventyComputed: {
+    // Compute the post number from the folder name
+    postNumber: (data) => {
+      return getPostNumberFromPath(data.page?.inputPath);
+    },
+
+    permalink: (data) => {
+      const num = getPostNumberFromPath(data.page?.inputPath);
+      return `/blog/${num}/`;
+    },
+
     image: (data) => {
       // Default social/cover image for the post.
       // Expected to exist next to the markdown file and copied to output.
