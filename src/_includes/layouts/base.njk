@@ -6,6 +6,25 @@
     <title>{% if title %}{{ title }} · {% endif %}{{ site.name }}</title>
     {% if description %}<meta name="description" content="{{ description }}" />{% endif %}
 
+    {% set canonicalUrl = page.url | absoluteUrl(site.url) %}
+    <link rel="canonical" href="{{ canonicalUrl }}" />
+
+    <meta property="og:site_name" content="{{ site.name }}" />
+    <meta property="og:title" content="{% if title %}{{ title }}{% else %}{{ site.name }}{% endif %}" />
+    {% if description %}<meta property="og:description" content="{{ description }}" />{% endif %}
+    <meta property="og:url" content="{{ canonicalUrl }}" />
+    <meta property="og:type" content="article" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{% if title %}{{ title }}{% else %}{{ site.name }}{% endif %}" />
+    {% if description %}<meta name="twitter:description" content="{{ description }}" />{% endif %}
+
+    {% if image %}
+      {% set imageAbs = image | absoluteUrl(site.url) %}
+      <meta property="og:image" content="{{ imageAbs }}" />
+      <meta name="twitter:image" content="{{ imageAbs }}" />
+    {% endif %}
+
     <script>
       (function () {
         try {
@@ -28,11 +47,17 @@
   <body{% if layout == 'layouts/post.njk' %} class="is-post-page"{% endif %}>
     <a href="#content" class="skip-link">Skip to content</a>
 
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      <span class="theme-icon"></span>
+    </button>
+
     {% include "partials/header.njk" %}
 
     <main class="container" id="content">
       {{ content | safe }}
     </main>
+
+    {% include "partials/footer.njk" %}
 
     <script>
       (function () {

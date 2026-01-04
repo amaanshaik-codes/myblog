@@ -36,6 +36,14 @@ function excerptFromHtml(html, maxLen = 180) {
 module.exports = function (eleventyConfig) {
   eleventyConfig.setQuietMode(true);
 
+  eleventyConfig.addFilter("absoluteUrl", (url, base) => {
+    try {
+      return new URL(String(url), String(base)).toString();
+    } catch {
+      return url;
+    }
+  });
+
   eleventyConfig.addCollection("posts", (collectionApi) => {
     return collectionApi.getFilteredByTag("posts").sort((a, b) => a.date - b.date);
   });

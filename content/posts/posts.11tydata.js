@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require("path");
+
 function parseDateFromText(text) {
   // Supports: "dec 28 2025" (case-insensitive), also with commas.
   const cleaned = String(text).trim().replace(/,/g, "");
@@ -31,7 +34,35 @@ module.exports = {
   layout: "layouts/post.njk",
   tags: ["posts"],
 
+  permalink: (data) => {
+    const slug = data.page?.fileSlug || "post";
+    return `/posts/${slug}/`;
+  },
+
   eleventyComputed: {
+    image: (data) => {
+      // Default social/cover image for the post.
+      // Expected to exist next to the markdown file and copied to output.
+      const baseUrl = data.page?.url || "/";
+      const inputPath = data.page?.inputPath;
+
+      if (inputPath) {
+        const dir = path.dirname(inputPath);
+        try {
+          const entries = fs.readdirSync(dir);
+          const lower = new Map(entries.map((name) => [String(name).toLowerCase(), name]));
+          for (const candidate of ["thumb.png", "thumb.jpg", "thumb.jpeg"]) {
+            const found = lower.get(candidate);
+            if (found) return `${baseUrl}${found}`;
+          }
+        } catch {
+          // ignore and fall back
+        }
+      }
+
+      return `${baseUrl}thumb.png`;
+    },
+
     title: (data) => {
       if (data.title) return data.title;
       // fileSlug already normalizes spaces/special chars
@@ -51,11 +82,6 @@ module.exports = {
       if (fromTitle) return fromTitle;
 
       return data.page?.date;
-    },
-
-    permalink: (data) => {
-      const slug = data.page?.fileSlug || "post";
-      return `/posts/${slug}/`;
     },
 
     description: (data) => {
