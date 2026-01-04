@@ -89,68 +89,98 @@ a:hover { opacity: 0.85; }
 }
 
 header.site-header {
-  padding: 2rem 0 1.25rem;
-  border-bottom: 1px dashed var(--border);
+  padding: 2.5rem 0 1.25rem;
+  border-bottom: 0;
 }
 
-.header-row {
+.stamp-header {
+  text-align: center;
+}
+
+.stamp-container {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
   align-items: center;
+  gap: 0.6rem;
 }
 
-.header-left {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.site-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 9999px;
-  object-fit: cover;
-  border: 1px solid var(--border);
-  display: block;
-}
-
-.site-meta { line-height: 1; }
-
-.theme-toggle {
-  margin-top: 0.15rem;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  padding: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  font: inherit;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.theme-toggle:hover { color: var(--fg); }
-
-.theme-toggle .theme-icon svg { display: block; width: 18px; height: 18px; }
-
-.site-title {
+.intro-line {
   margin: 0;
   font-family: "Lora", serif;
   font-weight: 600;
   letter-spacing: -0.01em;
-  font-size: 1.75rem;
+  font-size: 1.35rem;
 }
 
-.site-title a { text-decoration: none; }
+.intro-line em {
+  font-style: italic;
+}
 
-.site-subtitle {
-  margin: 0.5rem 0 0;
+.intro-subline {
+  margin: 0;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+}
+
+.stamp {
+  position: relative;
+  width: 200px; /* Increased from 170px */
+  height: 200px; /* Increased from 170px */
+  display: grid;
+  place-items: center;
+}
+
+.stamp::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 9999px;
+  border: 1px dashed var(--border);
+}
+
+.stamp-center {
+  width: 120px; /* Increased from 88px */
+  height: 120px; /* Increased from 88px */
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--code-bg);
+}
+
+.stamp-avatar {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: grayscale(100%) contrast(1.05) brightness(1.02);
+}
+
+html[data-theme="dark"] .stamp-avatar {
+  filter: grayscale(100%) contrast(0.95) brightness(0.95);
+}
+
+.stamp-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: stamp-rotate 26s linear infinite;
+}
+
+.stamp-text {
+  font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  fill: var(--muted);
+}
+
+@keyframes stamp-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp-ring { animation: none; }
 }
 
 main { padding: 1.5rem 0 2.5rem; }

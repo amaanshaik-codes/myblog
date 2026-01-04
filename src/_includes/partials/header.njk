@@ -1,20 +1,24 @@
-<header class="site-header">
-  <div class="container">
-    <div class="header-row">
-      <div class="header-left">
-        <a class="site-avatar-link" href="/">
-          <img class="site-avatar" src="/assets/myface.png" alt="Profile image" loading="lazy" />
-        </a>
+<header class="site-header stamp-header">
+  <div class="container stamp-container">
+    <p class="intro-line">Hi, I'm <em>Amaan!</em></p>
 
-        <div class="site-meta">
-          <h1 class="site-title"><a href="/">{{ site.name }}</a></h1>
-          <p class="site-subtitle">{{ site.description }}</p>
-        </div>
+    <p class="intro-subline">jack of all trades, learning to be a master of one</p>
+
+    <div class="stamp" aria-label="thinking out loud">
+      <div class="stamp-center">
+        <img class="stamp-avatar" src="/assets/myface.png" alt="Amaan profile photo" loading="lazy" />
       </div>
 
-      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
-        <span class="theme-icon" aria-hidden="true"></span>
-      </button>
+      <svg class="stamp-ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+        <defs>
+          <path id="stampCircle" d="M 100, 100 m -78, 0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
+        </defs>
+        <text class="stamp-text">
+          <textPath href="#stampCircle" startOffset="0%">
+            thinking out loud • thinking out loud • thinking out loud • thinking out loud •
+          </textPath>
+        </text>
+      </svg>
     </div>
   </div>
 </header>
