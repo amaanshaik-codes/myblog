@@ -1,0 +1,17 @@
+{
+  "name": "thinking-out-loud",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Minimal blog site for Netlify",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "eleventy"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "markdown-it": "^14.1.0"
+  }
+}

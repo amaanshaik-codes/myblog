@@ -1,0 +1,23 @@
+---
+layout: layouts/base.njk
+---
+
+<article class="post">
+  <figure class="post-hero">
+    <img 
+      src="thumb.png" 
+      alt="" 
+      class="post-hero-image"
+      onerror="this.style.display='none'"
+    />
+  </figure>
+
+  <header>
+    <h1>{{ title }}</h1>
+    {% if date %}<p class="post-meta">{{ date | readableDate }}</p>{% endif %}
+  </header>
+
+  <div class="post-content">
+    {{ content | safe }}
+  </div>
+</article>
