@@ -876,7 +876,7 @@ footer.site-footer {
 }
 
 .footer-text {
-  margin: 0;
+  margin: 0 0 1rem 0;
   letter-spacing: 0.01em;
   user-select: none;
   -webkit-user-select: none;
@@ -884,3 +884,490 @@ footer.site-footer {
   -ms-user-select: none;
 }
 
+/* System Link Status in Footer */
+.system-link-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.system-link-status:hover {
+  color: var(--fg);
+  border-color: var(--fg);
+  opacity: 1;
+}
+
+.system-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #27ca40;
+  animation: systemPulse 2s ease-in-out infinite;
+}
+
+@keyframes systemPulse {
+  0%, 100% { 
+    opacity: 0.4;
+    box-shadow: 0 0 0 0 rgba(39, 202, 64, 0.4);
+  }
+  50% { 
+    opacity: 1;
+    box-shadow: 0 0 8px 2px rgba(39, 202, 64, 0.3);
+  }
+}
+
+/* ============================================
+   SYS_LINK PAGE STYLES - Terminal Design
+   ============================================ */
+
+.is-syslink-page {
+  background: #0a0a0a;
+}
+
+html[data-theme="light"] .is-syslink-page {
+  background: #f5f5f5;
+}
+
+.is-syslink-page main {
+  padding: 0;
+  max-width: 100%;
+}
+
+.is-syslink-page .container {
+  max-width: 100%;
+  padding: 0;
+}
+
+/* Hide stamp header on syslink page */
+.is-syslink-page .stamp-header {
+  display: none;
+}
+
+/* Page layout */
+.syslink-page {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  padding: calc(5rem + env(safe-area-inset-top)) 0.75rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .syslink-page {
+    padding: calc(5.25rem + env(safe-area-inset-top)) 1.5rem 3rem;
+    max-width: 720px;
+  }
+}
+
+/* Terminal Window */
+.sys-terminal {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+html[data-theme="light"] .sys-terminal {
+  background: #1a1a1a;
+  border-color: #444;
+}
+
+.sys-terminal-header {
+  background: #1a1a1a;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid #333;
+}
+
+html[data-theme="light"] .sys-terminal-header {
+  background: #252525;
+  border-color: #444;
+}
+
+.sys-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.sys-dot.red { background: #ff5f56; }
+.sys-dot.yellow { background: #ffbd2e; }
+.sys-dot.green { background: #27ca40; }
+
+.sys-terminal-title {
+  margin-left: auto;
+  font-size: 10px;
+  color: #666;
+  letter-spacing: 0.03em;
+}
+
+.sys-terminal-body {
+  padding: 12px 14px;
+  font-size: 11px;
+  line-height: 1.4;
+  min-height: 200px;
+}
+
+@media (min-width: 768px) {
+  .sys-terminal-body {
+    padding: 16px 18px;
+    font-size: 12px;
+  }
+}
+
+/* ============================================
+   BOOT SEQUENCE
+   ============================================ */
+
+#boot-output {
+  min-height: 20px;
+}
+
+.boot-line {
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.boot-cmd {
+  color: #fff;
+}
+
+.boot-info {
+  color: #888;
+}
+
+.boot-success {
+  color: #27ca40;
+}
+
+.boot-dim {
+  color: #555;
+}
+
+.boot-cursor {
+  color: #27ca40;
+  animation: bootCursorBlink 0.6s step-end infinite;
+}
+
+@keyframes bootCursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ============================================
+   TUI DASHBOARD
+   ============================================ */
+
+.tui-dashboard {
+  margin: 0;
+  padding: 0;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #888;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+@media (min-width: 768px) {
+  .tui-dashboard {
+    font-size: 12px;
+  }
+}
+
+/* TUI Colors */
+.tui-dashboard #tui-host,
+.tui-dashboard #tui-uptime,
+.tui-dashboard #tui-time {
+  color: #fff;
+}
+
+.tui-dashboard #tui-cpu-bar { color: #27ca40; }
+.tui-dashboard #tui-cpu-pct { color: #27ca40; }
+.tui-dashboard #tui-cpu-temp { color: #ffbd2e; }
+
+.tui-dashboard #tui-ram-bar { color: #3b82f6; }
+.tui-dashboard #tui-ram-pct { color: #3b82f6; }
+.tui-dashboard #tui-ram-used,
+.tui-dashboard #tui-ram-total { color: #aaa; }
+
+.tui-dashboard #tui-disk-bar { color: #ff5f56; }
+.tui-dashboard #tui-disk-pct { color: #ff5f56; }
+.tui-dashboard #tui-disk-r,
+.tui-dashboard #tui-disk-w { color: #aaa; }
+
+.tui-dashboard #tui-net-up { color: #27ca40; }
+.tui-dashboard #tui-net-down { color: #3b82f6; }
+
+.tui-proc-header {
+  color: #666;
+}
+
+.tui-dashboard #tui-procs {
+  color: #aaa;
+}
+
+@keyframes sysBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ============================================
+   TIMELINE CTA SECTION
+   ============================================ */
+
+.timeline-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.timeline-cta.fade-out {
+  opacity: 0;
+}
+
+.timeline-heading {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #666;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  margin: 0;
+}
+
+html[data-theme="light"] .timeline-heading {
+  color: #555;
+}
+
+.timeline-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #333;
+  border-radius: 50%;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: arrowBounce 2s ease-in-out infinite;
+}
+
+.timeline-arrow:hover {
+  border-color: #27ca40;
+  color: #27ca40;
+  animation: none;
+}
+
+html[data-theme="light"] .timeline-arrow {
+  border-color: #ccc;
+  color: #666;
+}
+
+html[data-theme="light"] .timeline-arrow:hover {
+  border-color: #27ca40;
+  color: #27ca40;
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ============================================
+   COMMAND REVEAL SECTION
+   ============================================ */
+
+.cmd-reveal {
+  display: none;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.cmd-reveal.visible {
+  display: block;
+}
+
+.cmd-reveal.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cmd-line-reveal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1rem;
+}
+
+.cmd-prompt {
+  color: #27ca40;
+}
+
+.cmd-typed {
+  color: #fff;
+}
+
+html[data-theme="light"] .cmd-typed {
+  color: #111;
+}
+
+.cmd-cursor {
+  color: #27ca40;
+  opacity: 1;
+}
+
+.cmd-cursor.blink {
+  animation: cursorFlash 0.6s step-end infinite;
+}
+
+/* ============================================
+   SYSTEM LOGS SECTION
+   ============================================ */
+
+.system-logs {
+  margin-top: 1rem;
+  padding: 1.5rem 0.25rem 0;
+  scroll-margin-top: calc(4.5rem + env(safe-area-inset-top));
+}
+
+.system-logs.hidden {
+  display: none;
+}
+
+.system-logs.reveal {
+  animation: logsReveal 0.5s ease-out;
+}
+
+@keyframes logsReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logs-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #222;
+}
+
+html[data-theme="light"] .logs-header {
+  border-bottom-color: #444;
+}
+
+html[data-theme="light"] .logs-title {
+  color: #0a0a0a;
+}
+
+html[data-theme="light"] .logs-meta {
+  color: #444;
+}
+
+.logs-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.08em;
+}
+
+.logs-meta {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.log-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.log-entry {
+  position: relative;
+  padding-left: 0.85rem;
+  border-left: 2px solid #222;
+}
+
+html[data-theme="light"] .log-entry {
+  border-left-color: #444;
+}
+
+html[data-theme="light"] .log-timestamp {
+  color: #444;
+}
+
+.log-timestamp {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.log-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: #0a0a0a;
+  background: #27ca40;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  margin-bottom: 0.85rem;
+}
+
+.log-content {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #bbb;
+}
+
+html[data-theme="light"] .log-content {
+  color: #111;
+}
+
+html[data-theme="light"] .log-end-text {
+  color: #555;
+}
+
+.log-content p {
+  margin: 0 0 1rem;
+}
+
+.log-content p:last-child {
+  margin-bottom: 0;
+}
+
+.log-end {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.log-end-text {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: #444;
+}
