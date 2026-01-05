@@ -4,21 +4,116 @@
 
     <p class="intro-subline">jack of all trades, learning to be a master of one</p>
 
-    <div class="stamp" aria-label="binary pattern">
-      <div class="stamp-center">
-        <img class="stamp-avatar" src="/assets/myface.png" alt="Amaan profile photo" loading="lazy" />
+    <div class="stamp-wrapper">
+      <div class="stamp" aria-label="binary pattern">
+        <div class="stamp-center">
+          <img class="stamp-avatar" src="/assets/myface.png" alt="Amaan profile photo" loading="lazy" />
+        </div>
+
+        <a href="https://chat.openai.com/?prompt=01001000%2001100101%2001101100%2001101100%2001101111%2000100000%2001010111%2001101111%2001110010%2001101100%2001100100" class="stamp-ring-link" target="_blank" rel="noopener noreferrer" aria-label="Decode the binary">
+          <svg class="stamp-ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <defs>
+              <path id="stampCircle" d="M 100, 100 m -90, 0 a 90,90 0 1,1 180,0 a 90,90 0 1,1 -180,0" />
+            </defs>
+            <text class="stamp-text">
+              <textPath href="#stampCircle" startOffset="0%">01000001011011010110000101100001011011100100000101101101011000010110000101101110.</textPath>
+            </text>
+          </svg>
+        </a>
       </div>
 
-      <a href="https://chat.openai.com/?prompt=01001000%2001100101%2001101100%2001101100%2001101111%2000100000%2001010111%2001101111%2001110010%2001101100%2001100100" class="stamp-ring-link" target="_blank" rel="noopener noreferrer" aria-label="Decode the binary">
-        <svg class="stamp-ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
-          <defs>
-            <path id="stampCircle" d="M 100, 100 m -90, 0 a 90,90 0 1,1 180,0 a 90,90 0 1,1 -180,0" />
-          </defs>
-          <text class="stamp-text">
-            <textPath href="#stampCircle" startOffset="0%">01000001011011010110000101100001011011100100000101101101011000010110000101101110.</textPath>
-          </text>
-        </svg>
-      </a>
+      <div class="terminal-tooltip" aria-hidden="true">
+        <div class="terminal-flash"></div>
+        <div class="terminal-header">
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+          <span class="terminal-title">decoder.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line binary-dump">
+            <span class="terminal-prompt">$</span>
+            <span class="binary-stream">01101001 10110100 01011010</span>
+          </div>
+          <div class="terminal-line cmd">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-typed">decode --binary</span>
+            <span class="terminal-cursor">▎</span>
+          </div>
+          <div class="terminal-line compile">
+            <span class="terminal-prompt">›</span>
+            <span class="compile-text">Compiling<span class="compile-dots">...</span></span>
+          </div>
+          <div class="terminal-line result">
+            <span class="terminal-prompt">›</span>
+            <span class="terminal-output">HELLO WORLD</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <script>
+    // Terminal tooltip cursor-following - only on hover-capable devices
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      document.addEventListener('DOMContentLoaded', function() {
+        const stampWrapper = document.querySelector('.stamp-wrapper');
+        const tooltip = document.querySelector('.terminal-tooltip');
+        const stamp = document.querySelector('.stamp');
+        
+        if (stampWrapper && tooltip && stamp) {
+          const stampRadius = stamp.offsetWidth / 2;
+          const tooltipOffset = 20; // Distance from cursor
+          
+          stampWrapper.addEventListener('mousemove', function(e) {
+            const rect = stamp.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Calculate angle from center to cursor
+            const dx = e.clientX - centerX;
+            const dy = e.clientY - centerY;
+            const angle = Math.atan2(dy, dx);
+            
+            // Position tooltip outside the ring
+            const distance = stampRadius + tooltipOffset + tooltip.offsetWidth / 2;
+            
+            // Determine best position based on cursor quadrant
+            let tooltipX, tooltipY;
+            
+            if (Math.abs(dx) > Math.abs(dy)) {
+              // Horizontal positioning (left or right)
+              if (dx > 0) {
+                tooltipX = rect.width + tooltipOffset;
+                tooltipY = (rect.height / 2) + (dy * 0.3);
+              } else {
+                tooltipX = -tooltip.offsetWidth - tooltipOffset;
+                tooltipY = (rect.height / 2) + (dy * 0.3);
+              }
+            } else {
+              // Vertical positioning (top or bottom)
+              if (dy > 0) {
+                tooltipX = (rect.width / 2) - (tooltip.offsetWidth / 2) + (dx * 0.3);
+                tooltipY = rect.height + tooltipOffset;
+              } else {
+                tooltipX = (rect.width / 2) - (tooltip.offsetWidth / 2) + (dx * 0.3);
+                tooltipY = -tooltip.offsetHeight - tooltipOffset;
+              }
+            }
+            
+            tooltip.style.left = tooltipX + 'px';
+            tooltip.style.top = tooltipY + 'px';
+            tooltip.style.transform = 'none';
+          });
+          
+          // Reset position on mouse leave
+          stampWrapper.addEventListener('mouseleave', function() {
+            tooltip.style.left = '';
+            tooltip.style.top = '';
+            tooltip.style.transform = '';
+          });
+        }
+      });
+    }
+  </script>
 </header>

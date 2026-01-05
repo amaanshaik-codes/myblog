@@ -222,13 +222,315 @@ html[data-theme="dark"] .stamp-center {
   transition: opacity 0.2s ease;
 }
 
-.stamp-ring-link:hover {
-  opacity: 0.7;
-}
-
 .stamp-ring-link:focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 4px;
+}
+
+/* Stamp wrapper for tooltip positioning */
+.stamp-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Terminal tooltip - ONLY show on hover-capable devices */
+.terminal-tooltip {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stamp-ring-link:hover {
+    opacity: 1;
+  }
+
+  .stamp-ring-link:hover .stamp-ring {
+    opacity: 0.5;
+  }
+
+  .terminal-tooltip {
+    display: block;
+    position: absolute;
+    top: calc(100% + 25px);
+    left: 50%;
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top center;
+    width: 280px;
+    background: rgba(10, 10, 10, 0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 
+      0 25px 60px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 9999;
+    overflow: hidden;
+    pointer-events: none;
+    transition: left 0.15s ease-out, top 0.15s ease-out;
+  }
+
+  .stamp-wrapper:hover .terminal-tooltip {
+    opacity: 1;
+    visibility: visible;
+    animation: terminalPop 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .stamp-wrapper:hover .terminal-flash {
+    animation: terminalFlash 0.1s ease-out;
+  }
+
+  .stamp-wrapper:hover .binary-stream {
+    animation: binaryScramble 0.6s steps(1) forwards;
+  }
+
+  .stamp-wrapper:hover .terminal-line.binary-dump {
+    animation: lineHide 0.1s ease 0.4s forwards;
+  }
+
+  .stamp-wrapper:hover .terminal-line.cmd {
+    animation: lineShow 0.05s ease 0.45s forwards;
+  }
+
+  .stamp-wrapper:hover .terminal-typed {
+    animation: typeCommand 0.6s steps(15) 0.5s forwards;
+  }
+
+  .stamp-wrapper:hover .terminal-cursor {
+    animation: cursorBlink 0.5s step-end infinite;
+  }
+
+  .stamp-wrapper:hover .terminal-line.compile {
+    animation: lineShow 0.05s ease 1.2s forwards;
+  }
+
+  .stamp-wrapper:hover .compile-text {
+    animation: textFlicker 0.15s steps(1) 1.2s 4;
+  }
+
+  .stamp-wrapper:hover .terminal-line.result {
+    animation: lineShow 0.05s ease 1.8s forwards;
+  }
+
+  .stamp-wrapper:hover .terminal-output {
+    animation: glitchReveal 0.5s steps(6) 1.85s forwards;
+  }
+}
+
+/* Terminal flash overlay */
+.terminal-flash {
+  position: absolute;
+  inset: 0;
+  background: rgba(180, 180, 180, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.terminal-header {
+  background: rgba(30, 30, 30, 0.9);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.terminal-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: background 0.2s ease;
+}
+
+.stamp-wrapper:hover .terminal-dot:nth-child(1) { background: rgba(255, 95, 86, 0.9); }
+.stamp-wrapper:hover .terminal-dot:nth-child(2) { background: rgba(255, 189, 46, 0.9); }
+.stamp-wrapper:hover .terminal-dot:nth-child(3) { background: rgba(39, 202, 64, 0.9); }
+
+.terminal-title {
+  margin-left: auto;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.02em;
+}
+
+.terminal-body {
+  padding: 16px 18px;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  background: rgba(8, 8, 8, 0.5);
+}
+
+.terminal-line {
+  margin: 0 0 10px 0;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  height: 18px;
+}
+
+.terminal-line:last-child {
+  margin-bottom: 0;
+}
+
+.terminal-line.cmd,
+.terminal-line.compile,
+.terminal-line.result {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.terminal-line.binary-dump {
+  opacity: 1;
+  height: 18px;
+}
+
+.terminal-prompt {
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+/* Binary stream animation */
+.binary-stream {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+/* Command typing */
+.terminal-typed {
+  color: rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+  width: 0;
+}
+
+.terminal-cursor {
+  color: rgba(100, 255, 140, 0.8);
+  font-weight: 400;
+  margin-left: 1px;
+}
+
+/* Compile text */
+.compile-text {
+  color: rgba(255, 200, 100, 0.9);
+}
+
+.compile-dots {
+  color: rgba(255, 200, 100, 0.7);
+}
+
+/* Output - starts muted, glows on reveal */
+.terminal-output {
+  color: rgba(100, 255, 140, 0.9);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(100, 255, 140, 0.4);
+}
+
+/* Keyframes */
+@keyframes terminalPop {
+  0% {
+    transform: translateX(-50%) scaleY(0);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-50%) scaleY(1.02);
+  }
+  100% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes terminalFlash {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes binaryScramble {
+  0% { opacity: 1; }
+  25% { opacity: 0.7; }
+  50% { opacity: 0.9; }
+  75% { opacity: 0.6; }
+  100% { opacity: 0.3; }
+}
+
+@keyframes typeCommand {
+  from { width: 0; }
+  to { width: 15ch; }
+}
+
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes lineHide {
+  to { 
+    opacity: 0; 
+    height: 0; 
+    margin: 0;
+  }
+}
+
+@keyframes lineShow {
+  to { 
+    opacity: 1; 
+    height: 18px; 
+    margin: 0 0 10px 0;
+  }
+}
+
+@keyframes textFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes glitchReveal {
+  0%, 16% { 
+    opacity: 0.5;
+    filter: blur(2px);
+  }
+  17%, 33% { 
+    opacity: 0.7;
+    filter: blur(1px);
+  }
+  34%, 50% { 
+    opacity: 0.8;
+    filter: blur(0.5px);
+  }
+  51%, 66% { 
+    opacity: 0.9;
+    filter: blur(0);
+  }
+  67%, 83% { 
+    opacity: 0.95;
+    text-shadow: 0 0 15px rgba(100, 255, 140, 0.6);
+  }
+  84%, 100% { 
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(100, 255, 140, 0.4);
+    filter: blur(0);
+  }
 }
 
 .stamp-avatar {
@@ -432,6 +734,23 @@ article.post {
   max-width: var(--max);
 }
 
+/* Post header with site name */
+.post-header {
+  background: var(--bg);
+  padding: 2rem 0 1.5rem;
+  text-align: center;
+  margin: 0 0 2rem 0;
+}
+
+.post-site-name {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
 /* Post hero section */
 .post-hero {
   margin: 0 0 2rem 0;
@@ -450,7 +769,7 @@ article.post {
   height: auto;
   max-height: 500px;
   object-fit: cover;
-  border-radius: 0;
+  border-radius: 12px;
   border: none;
   margin: 0;
   padding: 0;
