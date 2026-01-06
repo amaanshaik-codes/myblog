@@ -2,22 +2,10 @@
 layout: layouts/base.njk
 ---
 
-<article class="post">
-  <div class="post-header">
-    <p class="post-site-name">thinking out loud</p>
-  </div>
-
-  <figure class="post-hero">
-    <img 
-      src="{{ image }}" 
-      alt="" 
-      class="post-hero-image"
-      onerror="this.style.display='none'"
-    />
-  </figure>
-
-  <header>
-    <h1>{{ title }}</h1>
+<article class="post post-enter">
+  <header class="post-head">
+    <h2 class="post-section-title">thinking out loud</h2>
+    <h1 class="post-title">{{ title }}</h1>
     {% if date %}<p class="post-meta">{{ date | readableDate }}</p>{% endif %}
   </header>
 

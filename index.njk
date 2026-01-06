@@ -5,8 +5,101 @@ description: A minimal blog.
 ---
 
 <nav class="home-nav">
-  <a href="/blog/" class="nav-link">
-    <span class="nav-icon">→</span>
-    <span class="nav-text">Read the blog</span>
-  </a>
+  <a href="/blog/" class="home-nav-btn">blog</a>
+  <a href="/mygpt/" class="home-nav-btn">mygpt</a>
 </nav>
+
+<section class="home-intro">
+  <p class="home-bio">
+    <span class="bio-seg" data-start="4" data-end="8">i'm a 20 year old learning my way into data engineering.</span>
+    <span class="bio-seg" data-start="16" data-end="21"> i treat this site like a slam book.</span>
+    <span class="bio-seg" data-start="8" data-end="16"> whatever you see here are my raw thoughts on things i'm exploring, projects i work on,</span>
+    <span class="bio-seg" data-start="21" data-end="27"> notes from what i'm learning, books i read, and more.</span>
+  </p>
+  <button class="listen-btn" id="play-voicenote" type="button" aria-label="Play voice note">
+    <span class="listen-glyph" aria-hidden="true">▶</span>
+    <span class="listen-text">listen</span>
+  </button>
+</section>
+
+<audio id="voicenote-audio" src="/assets/voicenote-2-enhanced-v2.wav" preload="metadata"></audio>
+
+<section class="recent-posts" aria-label="Recent posts">
+  <ul class="recent-list">
+    {%- for post in collections.posts | reverse -%}
+      {%- if loop.index <= 3 -%}
+      <li class="recent-item">
+        <a href="{{ post.url }}" class="recent-link">
+          <span class="recent-title">{{ post.data.title }}</span>
+          <time class="recent-date">{{ post.date | formatDate }}</time>
+        </a>
+      </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</section>
+
+<script>
+(function() {
+  var audio = document.getElementById('voicenote-audio');
+  var btn = document.getElementById('play-voicenote');
+  var segs = Array.prototype.slice.call(document.querySelectorAll('.bio-seg'));
+
+  function setPlayingUI(isPlaying) {
+    btn.classList.toggle('playing', isPlaying);
+    var glyph = btn.querySelector('.listen-glyph');
+    if (glyph) glyph.textContent = isPlaying ? '❚❚' : '▶';
+    btn.setAttribute('aria-label', isPlaying ? 'Pause voice note' : 'Play voice note');
+  }
+
+  function clearHighlights() {
+    segs.forEach(function (s) { s.classList.remove('highlight'); });
+  }
+
+  function syncHighlights() {
+    var t = audio.currentTime || 0;
+    segs.forEach(function (s) {
+      var start = Number(s.getAttribute('data-start')) || 0;
+      var end = Number(s.getAttribute('data-end')) || 0;
+      var on = t >= start && t < end;
+      s.classList.toggle('highlight', on);
+    });
+  }
+  
+  if (btn && audio) {
+    btn.addEventListener('click', function() {
+      if (audio.paused) {
+        audio.play().catch(function(err) {
+          console.error('Audio playback failed:', err);
+          setPlayingUI(false);
+        });
+        setPlayingUI(true);
+        syncHighlights();
+      } else {
+        audio.pause();
+        setPlayingUI(false);
+        clearHighlights();
+      }
+    });
+
+    audio.addEventListener('timeupdate', function () {
+      if (!audio.paused) syncHighlights();
+    });
+
+    audio.addEventListener('pause', function () {
+      setPlayingUI(false);
+    });
+    
+    audio.addEventListener('ended', function() {
+      setPlayingUI(false);
+      clearHighlights();
+    });
+
+    audio.addEventListener('error', function() {
+      console.error('Audio loading failed');
+      setPlayingUI(false);
+      clearHighlights();
+    });
+  }
+})();
+</script>

@@ -6,387 +6,264 @@ permalink: /sys_link/
 layoutClass: is-syslink-page
 ---
 
-<div class="syslink-page">
-  <!-- Terminal Window -->
-  <div class="sys-terminal" id="stats-terminal">
+<div class="syslink syslink-v2" id="syslink" data-ws-url="wss://hewlett.tail16475c.ts.net/">
+  <!-- Live Terminal with scrolling logs -->
+  <div class="sys-terminal syslink-terminal" id="syslink-terminal" aria-label="SYS_LINK terminal">
     <div class="sys-terminal-header">
-      <span class="sys-dot red"></span>
-      <span class="sys-dot yellow"></span>
-      <span class="sys-dot green"></span>
-      <span class="sys-terminal-title">hewlett — ssh</span>
+      <span class="sys-dot red" aria-hidden="true"></span>
+      <span class="sys-dot yellow" aria-hidden="true"></span>
+      <span class="sys-dot green" aria-hidden="true"></span>
+      <span class="sys-terminal-title" id="syslink-title">hewlett — ssh</span>
+      <div class="syslink-status-pill" id="syslink-status">connecting</div>
     </div>
-    <div class="sys-terminal-body" id="terminal-body">
-      <!-- Boot sequence will be rendered here -->
-      <div id="boot-output"></div>
-      <!-- TUI Dashboard (hidden until boot complete) -->
-      <pre class="tui-dashboard" id="tui-dashboard">┌─ SYSTEM ─────────────────────────────┐
-│ HOST     <span id="tui-host">----------</span>                │
-│ UPTIME   <span id="tui-uptime">----------</span>                │
-│ TIME     <span id="tui-time">--:--:--</span>                  │
-├─ CPU ────────────────────────────────┤
-│ <span id="tui-cpu-bar">[░░░░░░░░░░░░░░░░░░░░]</span> <span id="tui-cpu-pct">--.-</span>%     │
-│ TEMP <span id="tui-cpu-temp">--</span>°C                          │
-├─ MEMORY ─────────────────────────────┤
-│ <span id="tui-ram-bar">[░░░░░░░░░░░░░░░░░░░░]</span> <span id="tui-ram-pct">--.-</span>%     │
-│ <span id="tui-ram-used">--.--</span>GB / <span id="tui-ram-total">--.--</span>GB               │
-├─ DISK ───────────────────────────────┤
-│ <span id="tui-disk-bar">[░░░░░░░░░░░░░░░░░░░░]</span> <span id="tui-disk-pct">--.-</span>%     │
-│ R:<span id="tui-disk-r">----</span>KB/s  W:<span id="tui-disk-w">----</span>KB/s          │
-├─ NETWORK ────────────────────────────┤
-│ ▲ <span id="tui-net-up">------</span> KB/s   ▼ <span id="tui-net-down">------</span> KB/s   │
-├─ TOP ────────────────────────────────┤
-│ <span class="tui-proc-header">PID    NAME            MEM%</span>         │
-<span id="tui-procs">│ ----   --------        --.--        │
-│ ----   --------        --.--        │
-│ ----   --------        --.--        │</span>
-└──────────────────────────────────────┘</pre>
+
+    <div class="sys-terminal-body syslink-terminal-body">
+      <!-- Scrolling log stream -->
+      <div class="syslink-logstream" id="syslink-logstream">
+        <div class="syslink-logs-inner" id="syslink-logs-inner">
+          <!-- Boot sequence -->
+          <div class="syslink-log syslink-log--boot" id="boot-line-1">
+            <span class="log-prompt">hewlett@hewlett:~$</span>
+            <span class="log-cmd" id="boot-cmd-1"></span>
+            <span class="log-cursor" id="boot-cursor-1">█</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Timeline CTA Section -->
-  <section class="timeline-cta" id="timeline-cta">
-    <h2 class="timeline-heading">my linux timeline</h2>
-    <button class="timeline-arrow" id="timeline-trigger" aria-label="View Linux timeline">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 5v14M5 12l7 7 7-7"/>
-      </svg>
-    </button>
+  <!-- Meta bar -->
+  <div class="syslink-metabar" id="syslink-metabar">
+    <div class="syslink-meta-block">
+      <span class="syslink-meta-label">uptime</span>
+      <span class="syslink-meta-value" id="sys-meta-uptime">--</span>
+    </div>
+    <div class="syslink-meta-block">
+      <span class="syslink-meta-label">born</span>
+      <span class="syslink-meta-value" id="sys-meta-install">--</span>
+    </div>
+    <div class="syslink-meta-block">
+      <span class="syslink-meta-label">temp</span>
+      <span class="syslink-meta-value" id="sys-meta-temp">--°C</span>
+    </div>
+    <div class="syslink-meta-block">
+      <span class="syslink-meta-label">db</span>
+      <span class="syslink-meta-value" id="sys-meta-db">-- rows</span>
+    </div>
+  </div>
+
+  <!-- Bento grid -->
+  <section class="syslink-grid" id="syslink-grid">
+    <!-- Specs Card -->
+    <article class="syslink-card syslink-card--specs" aria-label="System Specs">
+      <header class="syslink-card-header">
+        <h2 class="syslink-card-title">specs</h2>
+        <div class="syslink-card-sub" id="sys-spec-status">--</div>
+      </header>
+      <div class="syslink-specs">
+        <div class="syslink-spec-row">
+          <span class="syslink-spec-key">os</span>
+          <span class="syslink-spec-val" id="sys-spec-os">Rocky Linux 10.1 (Red Quartz)</span>
+        </div>
+        <div class="syslink-spec-row">
+          <span class="syslink-spec-key">host</span>
+          <span class="syslink-spec-val" id="sys-spec-host">H81M-S</span>
+        </div>
+        <div class="syslink-spec-row">
+          <span class="syslink-spec-key">kernel</span>
+          <span class="syslink-spec-val" id="sys-spec-kernel">--</span>
+        </div>
+        <div class="syslink-spec-row">
+          <span class="syslink-spec-key">cpu</span>
+          <span class="syslink-spec-val" id="sys-spec-cpu">Intel Core i3-4150 (4) @ 3.50 GHz</span>
+        </div>
+        <div class="syslink-spec-row">
+          <span class="syslink-spec-key">ram</span>
+          <span class="syslink-spec-val" id="sys-spec-ram">-- GiB</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- CPU Card -->
+    <article class="syslink-card syslink-card--kpi" aria-label="CPU">
+      <header class="syslink-card-header">
+        <h2 class="syslink-card-title">cpu</h2>
+        <div class="syslink-card-sub">load <span id="sys-load">--</span></div>
+      </header>
+      <div class="syslink-kpi-row">
+        <div class="syslink-kpi">
+          <div class="syslink-kpi-value"><span id="sys-cpu">--</span><span class="syslink-kpi-unit">%</span></div>
+          <div class="syslink-kpi-meta">disk <span id="sys-disk-pct">--%</span></div>
+        </div>
+        <canvas class="syslink-spark" id="spark-cpu" width="240" height="64" aria-hidden="true"></canvas>
+      </div>
+      <div class="syslink-cores" id="sys-cores"></div>
+    </article>
+
+    <!-- Memory Card -->
+    <article class="syslink-card syslink-card--kpi" aria-label="Memory">
+      <header class="syslink-card-header">
+        <h2 class="syslink-card-title">memory</h2>
+        <div class="syslink-card-sub"><span id="sys-ram-used">--</span> / <span id="sys-ram-total">--</span> GiB</div>
+      </header>
+      <div class="syslink-kpi-row">
+        <div class="syslink-kpi">
+          <div class="syslink-kpi-value"><span id="sys-ram">--</span><span class="syslink-kpi-unit">%</span></div>
+        </div>
+        <canvas class="syslink-spark" id="spark-ram" width="240" height="64" aria-hidden="true"></canvas>
+      </div>
+    </article>
+
+    <!-- Network Card -->
+    <article class="syslink-card syslink-card--net" aria-label="Network">
+      <header class="syslink-card-header">
+        <h2 class="syslink-card-title">network i/o</h2>
+        <div class="syslink-card-sub">KB/s · ratio <span id="sys-net-ratio">--</span></div>
+      </header>
+      <div class="syslink-net-grid">
+        <div class="syslink-net-stat syslink-net-stat--up">
+          <div class="syslink-net-icon">↑</div>
+          <div class="syslink-net-value" id="sys-net-up">--</div>
+          <div class="syslink-net-label">upload</div>
+        </div>
+        <div class="syslink-net-stat syslink-net-stat--down">
+          <div class="syslink-net-icon">↓</div>
+          <div class="syslink-net-value" id="sys-net-down">--</div>
+          <div class="syslink-net-label">download</div>
+        </div>
+      </div>
+      <canvas class="syslink-spark syslink-spark--wide" id="spark-net" width="520" height="72" aria-hidden="true"></canvas>
+    </article>
+
+    <!-- Disk IO Card -->
+    <article class="syslink-card syslink-card--disk" aria-label="Disk IO">
+      <header class="syslink-card-header">
+        <h2 class="syslink-card-title">disk i/o</h2>
+        <div class="syslink-card-sub">KB/s</div>
+      </header>
+      <div class="syslink-disk-grid">
+        <div class="syslink-disk-stat">
+          <div class="syslink-disk-label">read</div>
+          <div class="syslink-disk-value" id="sys-disk-read">--</div>
+        </div>
+        <div class="syslink-disk-stat">
+          <div class="syslink-disk-label">write</div>
+          <div class="syslink-disk-value" id="sys-disk-write">--</div>
+        </div>
+      </div>
+      <canvas class="syslink-spark syslink-spark--wide" id="spark-disk" width="520" height="56" aria-hidden="true"></canvas>
+    </article>
+
+    <!-- Top Processes -->
+    <article class="syslink-card syslink-card--procs" aria-label="Top processes">
+      <header class="syslink-card-header">
+        <h2 class="syslink-card-title">top</h2>
+        <div class="syslink-card-sub">by memory</div>
+      </header>
+      <div class="syslink-procs" role="table" aria-label="Top 5 processes">
+        <div class="syslink-procs-head" role="row">
+          <div role="columnheader">pid</div>
+          <div role="columnheader">name</div>
+          <div role="columnheader" class="is-right">mem%</div>
+        </div>
+        <div class="syslink-procs-body" id="sys-procs" role="rowgroup"></div>
+      </div>
+    </article>
+
+    <!-- 48-hour Heatmap -->
+    <article class="syslink-card syslink-card--heat" aria-label="48-hour heatmap">
+      <header class="syslink-card-header">
+        <h2 class="syslink-card-title">48h</h2>
+        <div class="syslink-card-sub">cpu intensity heatmap</div>
+      </header>
+      <canvas class="syslink-heatmap" id="heatmap-48h" width="580" height="140" aria-label="Heatmap"></canvas>
+      <div class="syslink-heatmap-legend">
+        <span>-48h</span>
+        <span>now</span>
+      </div>
+    </article>
   </section>
 
-  <!-- Command Reveal Section -->
-  <div class="cmd-reveal" id="cmd-reveal">
-    <div class="cmd-line-reveal">
-      <span class="cmd-prompt">$</span>
-      <span class="cmd-typed" id="cmd-typed"></span><span class="cmd-cursor" id="cmd-cursor">█</span>
-    </div>
-  </div>
-
-  <!-- System Logs Section (original layout) -->
-  <section class="system-logs hidden" id="system-logs">
-    <header class="logs-header">
-      <div class="logs-title">MY.log</div>
-      <div class="logs-meta">// timeline</div>
+  <!-- Linux Timeline Section -->
+  <section class="syslink-timeline" id="syslink-timeline">
+    <header class="syslink-timeline-header">
+      <h2 class="syslink-timeline-title">my linux timeline</h2>
+      <div class="syslink-timeline-sub">// MY.log</div>
     </header>
 
-    <div class="log-entries">
-      <article class="log-entry">
-        <div class="log-timestamp">[2020.03] COVID_ERA</div>
-        <div class="log-tag">ORIGIN</div>
-        <div class="log-content">
+    <div class="syslink-timeline-entries">
+      <article class="syslink-timeline-entry">
+        <div class="syslink-timeline-date">[2020.03] COVID_ERA</div>
+        <div class="syslink-timeline-tag">ORIGIN</div>
+        <div class="syslink-timeline-content">
           <p>my experience with linux began during the COVID era. and at that time i did not even own a PC.</p>
           <p>i first came to know about linux from a video that got recommended to me on youtube. it was from NetworkChuck. his video about kali linux got my attention and it developed over time as i started watching more content about it. with that curiosity i wanted to try using linux, but the only way i could get close to it was through my phone.</p>
           <p>i emulated kali linux on my samsung j2 with 4 gigs of ram i guess, just to see if was possible. it technically did work, but i had no idea what i was doing. i didnt understand the interface, the tools it had, the terminal. but still it it was good and infact my interest has gone up even higher</p>
         </div>
       </article>
 
-      <article class="log-entry">
-        <div class="log-timestamp">[2021.XX] HARDWARE_UPGRADE</div>
-        <div class="log-tag">FIRST_PC</div>
-        <div class="log-content">
+      <article class="syslink-timeline-entry">
+        <div class="syslink-timeline-date">[2021.XX] HARDWARE_UPGRADE</div>
+        <div class="syslink-timeline-tag">FIRST_PC</div>
+        <div class="syslink-timeline-content">
           <p>a few years later after convincing my dad i finally got access to a desktop PC. it had an i3 4th gen processor with 8 gigs of ram. i felt like i had a supercomputer. i didnt sleep that night.</p>
           <p>it shipped with windows 10. and initially for a year i stuck with it. until i got linux on my screen again.</p>
         </div>
       </article>
 
-      <article class="log-entry">
-        <div class="log-timestamp">[2022.XX] FIRST_BOOT</div>
-        <div class="log-tag">UBUNTU</div>
-        <div class="log-content">
+      <article class="syslink-timeline-entry">
+        <div class="syslink-timeline-date">[2022.XX] FIRST_BOOT</div>
+        <div class="syslink-timeline-tag">UBUNTU</div>
+        <div class="syslink-timeline-content">
           <p>i installed ubuntu, and in the process i learned how operating systems work, what ISOs are, what's a boot menu and a bunch of more nerdy stuff.</p>
           <p>right from the first boot, linux felt very different. everything felt very fast, apps loaded faster, and strangely i remember the screen felt fast. in windows, i felt like refresh rate was like 30/45hz even though the screen was 60hz, moving the cursor felt laggy, but in the linux it felt super smooth.</p>
         </div>
       </article>
 
-      <article class="log-entry">
-        <div class="log-timestamp">[2022.XX - 2023.XX] DISTRO_HOP_PHASE</div>
-        <div class="log-tag">LEARNING</div>
-        <div class="log-content">
+      <article class="syslink-timeline-entry">
+        <div class="syslink-timeline-date">[2022.XX - 2023.XX] DISTRO_HOP_PHASE</div>
+        <div class="syslink-timeline-tag">LEARNING</div>
+        <div class="syslink-timeline-content">
           <p>from there i began distro hopping. i moved between ubuntu, fedora, arch based distributions. some worked smoothly, and most of the others were broke in many ways like audio issues, driver problems, and missing dependencies.</p>
           <p>this phase of my life taught me how to troubleshoot things about package managers, desktop environments, file systems and how much control an OS can give the user.</p>
         </div>
       </article>
 
-      <article class="log-entry">
-        <div class="log-timestamp">[2023.XX] PORTABLE_COMPUTE</div>
-        <div class="log-tag">LAPTOP</div>
-        <div class="log-content">
+      <article class="syslink-timeline-entry">
+        <div class="syslink-timeline-date">[2023.XX] PORTABLE_COMPUTE</div>
+        <div class="syslink-timeline-tag">LAPTOP</div>
+        <div class="syslink-timeline-content">
           <p>eventually i got a laptop which made my geek mind easier to try more things. i dual booted linux with windows and experimented with setups to balance practicality and a hobby i guess.</p>
         </div>
       </article>
 
-      <article class="log-entry">
-        <div class="log-timestamp">[PHILOSOPHY] KERNEL_THOUGHTS</div>
-        <div class="log-tag">REFLECTION</div>
-        <div class="log-content">
+      <article class="syslink-timeline-entry">
+        <div class="syslink-timeline-date">[PHILOSOPHY] KERNEL_THOUGHTS</div>
+        <div class="syslink-timeline-tag">REFLECTION</div>
+        <div class="syslink-timeline-content">
           <p>i believe that linux never was and i guess it never will be convinient to the most users as long as this capitalistic world exists.</p>
           <p>many everyday tools are not available and even if they are available, they are not stable.</p>
         </div>
       </article>
 
-      <article class="log-entry">
-        <div class="log-timestamp">[2024.XX - PRESENT] HEADLESS_MODE</div>
-        <div class="log-tag">HOMELAB</div>
-        <div class="log-content">
+      <article class="syslink-timeline-entry">
+        <div class="syslink-timeline-date">[2024.XX - PRESENT] HEADLESS_MODE</div>
+        <div class="syslink-timeline-tag">HOMELAB</div>
+        <div class="syslink-timeline-content">
           <p>the next shift came when i discovered 'home lab' content. this is when i stopped thinking about linux as just a desktop operating system.</p>
           <p>i set up a home server and learned to work headless. i become comfortable with bash commands and SSH, managing storage, local networking, hosting minecraft servers. i experimented with TrueNas, Proxmox, hosted Nextcloud, Jellyfin and many things.</p>
         </div>
       </article>
 
-      <div class="log-end">
-        <span class="log-end-text">--- END_OF_LOG ---</span>
+      <div class="syslink-timeline-end">
+        <span>--- END_OF_LOG ---</span>
       </div>
     </div>
   </section>
+
+  <noscript>
+    <p class="syslink-noscript">Enable JavaScript to view realtime telemetry.</p>
+  </noscript>
 </div>
 
-<script>
-(function() {
-  const WS_URL = 'wss://hewlett.tail16475c.ts.net/';
-  let ws;
-  let reconnectAttempts = 0;
-  const maxReconnectAttempts = 10;
-  let bootComplete = false;
-
-  const bootOutput = document.getElementById('boot-output');
-  const tuiDashboard = document.getElementById('tui-dashboard');
-  
-  // Hide TUI initially
-  tuiDashboard.style.display = 'none';
-
-  // Boot sequence lines
-  const bootLines = [
-    { text: '$ ssh hewlett@tailnet', delay: 0, type: 'cmd' },
-    { text: 'Connecting to hewlett.tail16475c.ts.net...', delay: 600, type: 'info' },
-    { text: 'Connection established.', delay: 1200, type: 'success' },
-    { text: 'Last login: ' + new Date().toLocaleString(), delay: 1400, type: 'dim' },
-    { text: '', delay: 1600, type: 'blank' },
-    { text: 'hewlett@hewlett:~$ ./monitor.sh', delay: 1800, type: 'cmd' },
-    { text: 'Loading system metrics...', delay: 2400, type: 'info' },
-    { text: '', delay: 2800, type: 'clear' }
-  ];
-
-  // Type out a line character by character
-  function typeLine(text, element, speed = 25) {
-    return new Promise(resolve => {
-      let i = 0;
-      const cursor = document.createElement('span');
-      cursor.className = 'boot-cursor';
-      cursor.textContent = '█';
-      element.appendChild(cursor);
-      
-      if (text.length === 0) {
-        cursor.remove();
-        resolve();
-        return;
-      }
-      
-      const interval = setInterval(() => {
-        if (i < text.length) {
-          cursor.before(document.createTextNode(text[i]));
-          i++;
-        } else {
-          clearInterval(interval);
-          cursor.remove();
-          resolve();
-        }
-      }, speed);
-    });
-  }
-
-  // Run boot sequence
-  async function runBoot() {
-    for (const line of bootLines) {
-      await new Promise(r => setTimeout(r, line.delay ? 200 : 0));
-      
-      if (line.type === 'clear') {
-        // Clear boot output and show TUI
-        bootOutput.innerHTML = '';
-        tuiDashboard.style.display = 'block';
-        bootComplete = true;
-        return;
-      }
-      
-      if (line.type === 'blank') {
-        bootOutput.appendChild(document.createElement('br'));
-        continue;
-      }
-      
-      const lineEl = document.createElement('div');
-      lineEl.className = 'boot-line boot-' + line.type;
-      bootOutput.appendChild(lineEl);
-      
-      if (line.type === 'cmd') {
-        await typeLine(line.text, lineEl, 30);
-      } else {
-        lineEl.textContent = line.text;
-      }
-      
-      await new Promise(r => setTimeout(r, line.delay));
-    }
-  }
-
-  // ASCII progress bar generator
-  function makeBar(pct, width = 20) {
-    const filled = Math.round((pct / 100) * width);
-    const empty = width - filled;
-    return '[' + '█'.repeat(filled) + '░'.repeat(empty) + ']';
-  }
-
-  // Pad string to fixed width
-  function pad(str, len, align = 'left') {
-    str = String(str);
-    if (str.length >= len) return str.slice(0, len);
-    const spaces = ' '.repeat(len - str.length);
-    return align === 'right' ? spaces + str : str + spaces;
-  }
-
-  function connect() {
-    try {
-      ws = new WebSocket(WS_URL);
-    } catch (e) {
-      scheduleReconnect();
-      return;
-    }
-
-    ws.onopen = function() {
-      reconnectAttempts = 0;
-    };
-
-    ws.onmessage = function(event) {
-      try {
-        if (bootComplete) {
-          updateTUI(JSON.parse(event.data));
-        }
-      } catch (e) {}
-    };
-
-    ws.onclose = function() {
-      scheduleReconnect();
-    };
-
-    ws.onerror = function() {};
-  }
-
-  function scheduleReconnect() {
-    if (reconnectAttempts < maxReconnectAttempts) {
-      reconnectAttempts++;
-      setTimeout(connect, Math.min(1000 * Math.pow(2, reconnectAttempts), 30000));
-    }
-  }
-
-  function updateTUI(d) {
-    // System info
-    if (d.metadata) {
-      setText('tui-host', pad(d.metadata.hostname || '----------', 10));
-      setText('tui-uptime', pad(d.metadata.uptime || '----------', 10));
-    }
-    setText('tui-time', pad(d.timestamp || '--:--:--', 8));
-
-    // CPU
-    if (d.core) {
-      const cpu = d.core.cpu || 0;
-      setText('tui-cpu-bar', makeBar(cpu));
-      setText('tui-cpu-pct', pad(cpu.toFixed(1), 4, 'right'));
-      setText('tui-cpu-temp', pad(String(d.core.temp || '--'), 2, 'right'));
-
-      // RAM
-      const ram = d.core.ram_pct || 0;
-      setText('tui-ram-bar', makeBar(ram));
-      setText('tui-ram-pct', pad(ram.toFixed(1), 4, 'right'));
-      setText('tui-ram-used', pad((d.core.ram_used || '--'), 5, 'right'));
-      setText('tui-ram-total', pad((d.core.ram_total || '--'), 5, 'right'));
-    }
-
-    // Storage
-    if (d.storage) {
-      const disk = d.storage.pct || 0;
-      setText('tui-disk-bar', makeBar(disk));
-      setText('tui-disk-pct', pad(disk.toFixed(1), 4, 'right'));
-      setText('tui-disk-r', pad(String(d.storage.read || 0), 4, 'right'));
-      setText('tui-disk-w', pad(String(d.storage.write || 0), 4, 'right'));
-    }
-
-    // Network
-    if (d.io) {
-      setText('tui-net-up', pad((d.io.up || 0).toFixed(1), 6, 'right'));
-      setText('tui-net-down', pad((d.io.down || 0).toFixed(1), 6, 'right'));
-    }
-
-    // Processes
-    if (d.processes && d.processes.length) {
-      const procs = d.processes.slice(0, 3).map(p => {
-        const pid = pad(String(p.pid), 6);
-        const name = pad(p.name, 15);
-        const mem = pad(p.mem.toFixed(2), 5, 'right');
-        return `│ ${pid} ${name} ${mem}        │`;
-      });
-      // Fill remaining slots if less than 3
-      while (procs.length < 3) {
-        procs.push('│ ----   --------        --.--        │');
-      }
-      setText('tui-procs', procs.join('\n'));
-    }
-  }
-
-  function setText(id, v) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = v;
-  }
-
-  // Timeline arrow trigger
-  (function timelineReveal() {
-    const trigger = document.getElementById('timeline-trigger');
-    const cmdReveal = document.getElementById('cmd-reveal');
-    const cmdTyped = document.getElementById('cmd-typed');
-    const cmdCursor = document.getElementById('cmd-cursor');
-    const logsSection = document.getElementById('system-logs');
-    const timelineCta = document.getElementById('timeline-cta');
-    
-    if (!trigger) return;
-
-    let triggered = false;
-
-    trigger.addEventListener('click', function() {
-      if (triggered) return;
-      triggered = true;
-
-      timelineCta.classList.add('fade-out');
-      
-      setTimeout(() => {
-        timelineCta.style.display = 'none';
-        cmdReveal.classList.add('visible');
-        
-        const CMD = 'cat MY.log';
-        let idx = 0;
-        
-        const typeInterval = setInterval(() => {
-          if (idx < CMD.length) {
-            cmdTyped.textContent += CMD[idx];
-            idx++;
-          } else {
-            clearInterval(typeInterval);
-            cmdCursor.classList.add('blink');
-            
-            setTimeout(() => {
-              cmdReveal.classList.add('fade-out');
-              setTimeout(() => {
-                cmdReveal.style.display = 'none';
-                logsSection.classList.remove('hidden');
-                logsSection.classList.add('reveal');
-                
-                setTimeout(() => {
-                  logsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-              }, 300);
-            }, 600);
-          }
-        }, 70);
-      }, 300);
-    });
-  })();
-
-  // Start
-  runBoot();
-  if (typeof WebSocket !== 'undefined') connect();
-})();
-</script>
+<script src="/assets/syslink.js" defer></script>

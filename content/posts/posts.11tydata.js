@@ -82,8 +82,6 @@ module.exports = {
     },
 
     image: (data) => {
-      // Default social/cover image for the post.
-      // Expected to exist next to the markdown file and copied to output.
       const baseUrl = data.page?.url || "/";
       const inputPath = data.page?.inputPath;
 
@@ -101,7 +99,8 @@ module.exports = {
         }
       }
 
-      return `${baseUrl}thumb.png`;
+      // No cover image found; keep it unset.
+      return null;
     },
 
     title: (data) => {

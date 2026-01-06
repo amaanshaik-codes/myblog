@@ -118,6 +118,18 @@ module.exports = function (eleventyConfig) {
       return "";
     }
   });
+  eleventyConfig.addFilter("formatDate", (dateObj) => {
+    try {
+      const d = new Date(dateObj);
+      const day = String(d.getDate()).padStart(2, '0');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const month = months[d.getMonth()];
+      const year = d.getFullYear();
+      return `${day}.${month}.${year}`;
+    } catch {
+      return "";
+    }
+  });
   eleventyConfig.addFilter("excerpt", (html, maxLen) => excerptFromHtml(html, maxLen));
 
   eleventyConfig.addPassthroughCopy({ "assets": "assets" });

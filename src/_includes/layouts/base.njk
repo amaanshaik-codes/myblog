@@ -47,16 +47,16 @@
   <body class="{% if layoutClass %}{{ layoutClass }}{% endif %}{% if layout == 'layouts/post.njk' %} is-post-page{% endif %}">
     <a href="#content" class="skip-link">Skip to content</a>
 
-    {% if page.url and (page.url.substring(0,6) == '/blog/' or page.url == '/sys_link/') %}
-      <a href="{% if page.url == '/blog/' or page.url == '/sys_link/' %}/{% else %}/blog/{% endif %}" class="back-button" aria-label="Go back">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    {% if page.url and (page.url.substring(0,6) == '/blog/' or page.url == '/sys_link/' or page.url == '/mygpt/') %}
+      <a href="{% if page.url == '/blog/' or page.url == '/sys_link/' or page.url == '/mygpt/' %}/{% else %}/blog/{% endif %}" class="back-button" aria-label="Go back" title="(Back)">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <path d="M15 18l-6-6 6-6"/>
         </svg>
       </a>
     {% endif %}
 
     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-      <span class="theme-icon"></span>
+      <span class="theme-icon" aria-hidden="true"></span>
     </button>
 
     {% include "partials/header.njk" %}
