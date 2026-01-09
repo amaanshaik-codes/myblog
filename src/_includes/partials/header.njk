@@ -1,13 +1,16 @@
 <header class="site-header stamp-header">
   <div class="container stamp-container">
-    <p class="intro-line">Hi, I'm <em>Amaan!</em></p>
+    <a href="/" class="intro-line" aria-label="Home">Hi, I'm <em>Amaan!</em></a>
 
     <p class="intro-subline">jack of all trades, learning to be a master of one</p>
 
     <div class="stamp-wrapper">
       <div class="stamp" aria-label="binary pattern">
         <div class="stamp-center">
-          <img class="stamp-avatar" src="/assets/myface.png" alt="Amaan profile photo" loading="lazy" />
+          <picture>
+            <source srcset="/assets/myface.webp" type="image/webp" />
+            <img class="stamp-avatar" src="/assets/myface.png" alt="Amaan Shaik - Profile photo" loading="lazy" decoding="async" />
+          </picture>
         </div>
 
         <a href="https://chat.openai.com/?prompt=01001000%2001100101%2001101100%2001101100%2001101111%2000100000%2001010111%2001101111%2001110010%2001101100%2001100100" class="stamp-ring-link" target="_blank" rel="noopener noreferrer" aria-label="Decode the binary">
@@ -52,68 +55,4 @@
       </div>
     </div>
   </div>
-
-  <script>
-    // Terminal tooltip cursor-following - only on hover-capable devices
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      document.addEventListener('DOMContentLoaded', function() {
-        const stampWrapper = document.querySelector('.stamp-wrapper');
-        const tooltip = document.querySelector('.terminal-tooltip');
-        const stamp = document.querySelector('.stamp');
-        
-        if (stampWrapper && tooltip && stamp) {
-          const stampRadius = stamp.offsetWidth / 2;
-          const tooltipOffset = 20; // Distance from cursor
-          
-          stampWrapper.addEventListener('mousemove', function(e) {
-            const rect = stamp.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            
-            // Calculate angle from center to cursor
-            const dx = e.clientX - centerX;
-            const dy = e.clientY - centerY;
-            const angle = Math.atan2(dy, dx);
-            
-            // Position tooltip outside the ring
-            const distance = stampRadius + tooltipOffset + tooltip.offsetWidth / 2;
-            
-            // Determine best position based on cursor quadrant
-            let tooltipX, tooltipY;
-            
-            if (Math.abs(dx) > Math.abs(dy)) {
-              // Horizontal positioning (left or right)
-              if (dx > 0) {
-                tooltipX = rect.width + tooltipOffset;
-                tooltipY = (rect.height / 2) + (dy * 0.3);
-              } else {
-                tooltipX = -tooltip.offsetWidth - tooltipOffset;
-                tooltipY = (rect.height / 2) + (dy * 0.3);
-              }
-            } else {
-              // Vertical positioning (top or bottom)
-              if (dy > 0) {
-                tooltipX = (rect.width / 2) - (tooltip.offsetWidth / 2) + (dx * 0.3);
-                tooltipY = rect.height + tooltipOffset;
-              } else {
-                tooltipX = (rect.width / 2) - (tooltip.offsetWidth / 2) + (dx * 0.3);
-                tooltipY = -tooltip.offsetHeight - tooltipOffset;
-              }
-            }
-            
-            tooltip.style.left = tooltipX + 'px';
-            tooltip.style.top = tooltipY + 'px';
-            tooltip.style.transform = 'none';
-          });
-          
-          // Reset position on mouse leave
-          stampWrapper.addEventListener('mouseleave', function() {
-            tooltip.style.left = '';
-            tooltip.style.top = '';
-            tooltip.style.transform = '';
-          });
-        }
-      });
-    }
-  </script>
 </header>

@@ -5,13 +5,18 @@
   "description": "Minimal blog site for Netlify",
   "scripts": {
     "dev": "eleventy --serve",
-    "build": "eleventy"
+    "build": "eleventy",
+    "generate:favicons": "node scripts/generate-favicons.js",
+    "install-geist-fonts": "node scripts/install-geist-fonts.js",
+    "postinstall": "npm run install-geist-fonts || true && npm run generate:favicons || true"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "markdown-it": "^14.1.0"
+    "geist": "^1.5.1",
+    "markdown-it": "^14.1.0",
+    "sharp": "^0.32.0"
   }
 }

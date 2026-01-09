@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /_site/
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /.env
+
+Sitemap: https://amaanshaik.me/sitemap.xml

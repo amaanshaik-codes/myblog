@@ -44,6 +44,14 @@ module.exports = function (eleventyConfig) {
     }
   });
 
+  eleventyConfig.addFilter("rssDate", (dateObj) => {
+    try {
+      return new Date(dateObj).toUTCString();
+    } catch {
+      return "";
+    }
+  });
+
   eleventyConfig.addCollection("posts", (collectionApi) => {
     return collectionApi.getFilteredByTag("posts").sort((a, b) => a.date - b.date);
   });

@@ -11,11 +11,11 @@
 
 html[data-theme="light"] {
   --bg: #ffffff;
-  --fg: #111111;
-  --muted: #4f4f4f;
-  --border: #e2e2e2;
-  --code-bg: #f6f6f6;
-  --code-border: #e3e3e3;
+  --fg: #000000;
+  --muted: #404040;
+  --border: #d9d9d9;
+  --code-bg: #f3f3f3;
+  --code-border: #d9d9d9;
 }
 
 html[data-theme="dark"] {
@@ -72,12 +72,18 @@ html, body {
   padding: 0;
   background: var(--bg);
   color: var(--fg);
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Use Geist if available but keep Lora for headings */
+  font-family: var(--body-font), system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 a {
@@ -191,11 +197,15 @@ header.site-header {
 }
 
 .intro-line {
+  display: block;
   margin: 0;
   font-family: "Lora", serif;
   font-weight: 600;
   letter-spacing: -0.02em;
   font-size: 1.5rem;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .intro-line em {
@@ -210,7 +220,7 @@ header.site-header {
   position: relative;
 }
 
-/* Shine effect in dark mode */
+/* Shine effect in dark mode only */
 html[data-theme="dark"] .intro-subline {
   background: linear-gradient(
     90deg,
@@ -225,6 +235,15 @@ html[data-theme="dark"] .intro-subline {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shineText 3s ease-in-out infinite;
+}
+
+/* Light mode: disable shine, show normal text */
+html[data-theme="light"] .intro-subline {
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  -webkit-text-fill-color: unset;
+  color: var(--muted);
 }
 
 @keyframes shineText {
@@ -318,6 +337,7 @@ html[data-theme="dark"] .stamp-center {
     transform: translateX(-50%) scaleY(0);
     transform-origin: top center;
     width: 280px;
+    max-width: 90vw;
     background: rgba(10, 10, 10, 0.97);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -611,7 +631,8 @@ html[data-theme="dark"] .stamp-avatar {
   inset: 0;
   width: 100%;
   height: 100%;
-  animation: stamp-rotate 45s linear infinite;
+  animation: stamp-rotate 60s linear infinite;
+  will-change: transform;
 }
 
 .stamp-text {
@@ -620,6 +641,8 @@ html[data-theme="dark"] .stamp-avatar {
   letter-spacing: 0.18em;
   fill: var(--muted);
   font-weight: 500;
+  user-select: none;
+  pointer-events: none;
 }
 
 @keyframes stamp-rotate {
@@ -681,6 +704,40 @@ html[data-theme="dark"] .stamp-avatar {
   border-bottom-color: var(--fg);
 }
 
+/* Geist font loading tweaks */
+@font-face {
+  font-family: 'Geist Sans';
+  src: url('/assets/fonts/GeistSans.woff2') format('woff2');
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/assets/fonts/GeistMono.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --body-font: 'Geist Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --mono-font: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+html.fonts-loaded body {
+  font-family: var(--body-font);
+  letter-spacing: -0.01em;
+  line-height: 1.65;
+}
+
+html.fonts-loaded .post-content code,
+html.fonts-loaded pre,
+html.fonts-loaded .compile-text {
+  font-family: var(--mono-font);
+}
+
 /* Home intro section */
 .home-intro {
   display: flex;
@@ -689,6 +746,7 @@ html[data-theme="dark"] .stamp-avatar {
   max-width: 600px;
   margin: 2.5rem auto 0;
   padding: 0 1rem;
+  flex-wrap: wrap;
 }
 
 .home-bio {
@@ -697,6 +755,15 @@ html[data-theme="dark"] .stamp-avatar {
   color: var(--muted);
   margin: 0;
   text-align: left;
+  flex: 1 1 100%;
+  word-wrap: break-word;
+}
+
+@media (max-width: 480px) {
+  .home-intro {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 }
 
 .bio-seg {
@@ -716,8 +783,8 @@ html[data-theme="light"] .bio-seg.highlight {
 .listen-btn {
   flex-shrink: 0;
   background: none;
-  border: none;
-  padding: 0.35rem 0.25rem;
+  border: 1px solid transparent;
+  padding: 0.35rem 0.5rem;
   cursor: pointer;
   color: var(--fg);
   display: inline-flex;
@@ -728,17 +795,30 @@ html[data-theme="light"] .bio-seg.highlight {
   font-size: 1rem;
   text-decoration: underline;
   text-underline-offset: 0.22em;
-  transition: opacity 0.2s ease;
+  transition: all 0.2s ease;
+  border-radius: 4px;
 }
 
 .listen-btn:hover {
-  opacity: 0.75;
+  opacity: 0.8;
+  border-color: var(--fg);
+  background: rgba(242, 242, 242, 0.05);
+}
+
+html[data-theme="light"] .listen-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .listen-glyph {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem; /* fixed width to avoid layout shifts when glyph changes */
+  min-width: 1.1rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.95rem;
   line-height: 1;
+  text-align: center;
 }
 
 .listen-btn.playing {
@@ -767,16 +847,24 @@ html[data-theme="light"] .bio-seg.highlight {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 1rem;
+  gap: 1.5rem;
   padding: 12px 0;
+  border-bottom: 1px solid transparent;
   text-decoration: none;
   color: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.recent-link:hover {
+  border-bottom-color: var(--border);
 }
 
 .recent-title {
   font-family: "Lora", serif;
   font-size: 1rem;
   font-weight: 500;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .recent-date {
@@ -784,6 +872,7 @@ html[data-theme="light"] .bio-seg.highlight {
   color: var(--muted);
   font-size: 0.88rem;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .recent-link:hover .recent-title {
@@ -793,6 +882,9 @@ html[data-theme="light"] .bio-seg.highlight {
 
 main { 
   padding: 1.5rem 0 2.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 480px) {
@@ -932,6 +1024,25 @@ article.post {
   letter-spacing: -0.01em;
 }
 
+.post-section-title a {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.06rem 0.12rem;
+  border-radius: 4px;
+}
+
+.post-section-title a:hover,
+.post-section-title a:focus {
+  text-decoration: underline;
+  color: var(--fg);
+}
+
+.post-section-title a:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.06);
+}
+
 .post-title {
   font-family: "Lora", serif;
   font-weight: 600;
@@ -944,14 +1055,25 @@ article.post {
 .post .post-meta { margin-bottom: 1.5rem; }
 
 .post-content {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.6;
 }
 
+/* Responsive embeds */
+.embed {
+  margin: 1.25rem 0;
+}
+
+.embed iframe {
+  width: 100%;
+  min-width: 100%;
+  border: none;
+  display: block;
+}
+
 /* Post open blur animation */
 .is-post-page .post-enter {
-  animation: postEnter 0.6s ease-out both;
+  animation: postEnter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 @keyframes postEnter {
@@ -970,6 +1092,13 @@ article.post {
 @media (prefers-reduced-motion: reduce) {
   .is-post-page .post-enter {
     animation: none;
+  }
+}
+
+/* Ensure animation works on desktop */
+@media (min-width: 640px) {
+  .is-post-page .post-enter {
+    animation: postEnter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 }
 
@@ -1004,16 +1133,13 @@ article.post {
   border: 1px solid var(--code-border);
   border-radius: 8px;
   background: var(--code-bg);
-  font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.9rem;
 }
 
 .post-content code {
-  font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .post-content :not(pre) > code {
-  font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   background: var(--code-bg);
   border: 1px solid var(--code-border);
   padding: 0.1rem 0.3rem;
@@ -1048,6 +1174,13 @@ footer.site-footer {
   color: var(--muted);
   font-size: 0.875rem;
   text-align: center;
+  margin-top: auto;
+}
+
+@media (max-width: 480px) {
+  footer.site-footer {
+    padding: 2rem 0 2.5rem;
+  }
 }
 
 .footer-text {
@@ -1099,50 +1232,799 @@ footer.site-footer {
   }
 }
 
-/* WIP Page styles */
-.wip-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  text-align: center;
+/* ============================================
+   MYGPT CHAT PAGE
+   ============================================ */
+
+.is-mygpt-page .stamp-header,
+.is-mygpt-page .site-header,
+.is-mygpt-page .site-footer,
+.is-mygpt-page .skip-link {
+  display: none !important;
 }
 
-.wip-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.wip-badge {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  background: var(--code-bg);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
+/* Show and style theme toggle on mygpt page for quick access */
+.is-mygpt-page .theme-toggle {
+  display: inline-flex !important;
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top, 0px) + 0.5rem);
+  right: max(1rem, env(safe-area-inset-right, 0px) + 0.5rem);
+  background: rgba(255,255,255,0.02);
   border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem;
+  color: var(--muted);
+  z-index: 1002;
 }
 
-.wip-title {
-  font-family: "Lora", serif;
-  font-size: 2rem;
-  font-weight: 400;
-  margin: 0;
+.is-mygpt-page .theme-toggle:hover {
+  background: var(--code-bg);
   color: var(--fg);
 }
 
-.wip-text {
+.is-mygpt-page .theme-toggle:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+.is-mygpt-page body {
+  overflow: hidden;
+}
+
+.is-mygpt-page main {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ============================================
+   MYGPT PAGE STYLES - Native App Experience
+   ============================================ */
+
+/* Container - Full viewport, no scrolling issues */
+.mygpt-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: var(--bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Header - Sticky with backdrop blur */
+.mygpt-header {
+  border-bottom: 1px solid var(--border);
+  padding: 0.875rem 1rem;
+  background: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.mygpt-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.mygpt-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.mygpt-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.mygpt-back:hover {
+  background: var(--border);
+  opacity: 1;
+}
+
+.mygpt-back:active {
+  transform: scale(0.95);
+}
+
+.mygpt-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.mygpt-title {
+  font-family: var(--body-font), system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+.mygpt-subtitle {
+  font-size: 0.6875rem;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-family: var(--mono-font), monospace;
+  letter-spacing: 0;
+}
+
+.mygpt-status {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  color: var(--muted);
+  padding: 0.375rem 0.625rem;
+  border-radius: 12px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  font-family: var(--mono-font), monospace;
+}
+
+.mygpt-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.mygpt-status[data-status="online"] .mygpt-status-dot {
+  background: #27ca40;
+  box-shadow: 0 0 8px rgba(39, 202, 64, 0.4);
+}
+
+.mygpt-status[data-status="offline"] .mygpt-status-dot {
+  background: #ff5f56;
+  animation: none;
+}
+
+.mygpt-status[data-status="generating"] .mygpt-status-dot {
+  background: #3b82f6;
+  animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+}
+
+/* Messages - Smooth scrolling with momentum */
+.mygpt-messages {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Add top padding to avoid overlap with fixed back button */
+  padding: calc(1.25rem + max(1.5rem, env(safe-area-inset-top, 0px) + 0.5rem)) 1rem 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Hide header content on mygpt page (title, subtitle, status) — we keep only the global back-button */
+.is-mygpt-page .mygpt-header {
+  display: none !important;
+}
+
+/* spacer to ensure consistent spacing when header removed */
+.mygpt-top-spacer {
+  height: calc(max(1.5rem, env(safe-area-inset-top, 0px) + 0.5rem));
+  flex-shrink: 0;
+}
+
+.mygpt-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mygpt-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mygpt-messages::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.mygpt-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Welcome screen - minimal Grok-style */
+.mygpt-welcome {
+  text-align: center;
+  padding: 3rem 1rem;
+  max-width: 500px;
+  margin: auto;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out 0.2s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* mygpt branding in Lora */
+.mygpt-welcome-brand {
+  font-family: 'Lora', serif;
+  font-size: 3rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  color: var(--fg);
+  letter-spacing: -0.04em;
+}
+
+.mygpt-welcome-description {
+  color: var(--muted);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* Modal - Model Information */
+.mygpt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 998;
+}
+
+.mygpt-modal-overlay.mygpt-modal-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mygpt-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 999;
+  max-width: 90%;
+  width: 100%;
+}
+
+.mygpt-modal.mygpt-modal-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.mygpt-modal-content {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.mygpt-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.mygpt-modal-close:hover {
+  background: var(--code-bg);
+  color: var(--fg);
+}
+
+.mygpt-modal-title {
+  font-family: 'Lora', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  color: var(--fg);
+}
+
+.mygpt-modal-body {
+  color: var(--fg);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin: 0 0 1.5rem 0;
+}
+
+.mygpt-modal-body p {
+  margin: 0 0 1rem 0;
+}
+
+.mygpt-modal-body p:last-child {
   margin: 0;
 }
 
-/* Hide stamp header on mygpt page */
-.is-mygpt-page .stamp-header {
-  display: none;
+.mygpt-modal-body strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.mygpt-modal-action {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--fg);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mygpt-modal-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mygpt-modal-action:active {
+  transform: translateY(0);
+}
+
+/* Message - Minimal Grok-style */
+.mygpt-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* User messages align right with bubble */
+.mygpt-message--user {
+  align-items: flex-end;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* User bubble - pill style like Grok */
+.mygpt-user-bubble {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  color: var(--fg);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  max-width: 85%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* AI response - plain text, no card */
+.mygpt-message--assistant {
+  padding-left: 0;
+}
+
+.mygpt-message-text {
+  display: block;
+  color: var(--fg);
+  font-size: 1rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Word-by-word blur reveal animation */
+.mygpt-word-reveal {
+  display: inline;
+  animation: wordBlurIn 0.3s ease-out forwards;
+}
+
+@keyframes wordBlurIn {
+  0% {
+    filter: blur(4px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+/* Error state for AI messages */
+.mygpt-message--error .mygpt-message-text {
+  color: #ff5f56;
+}
+
+/* Message actions (copy button, token display) */
+.mygpt-message-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.mygpt-message--assistant:hover .mygpt-message-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Copy button */
+.mygpt-message-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mygpt-message-copy:hover {
+  background: var(--code-bg);
+  color: var(--fg);
+  border-color: var(--fg);
+}
+
+.mygpt-message-copy svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Copied feedback state */
+.mygpt-message-copy--copied {
+  background: var(--code-bg) !important;
+  color: #27ca40 !important;
+  border-color: #27ca40 !important;
+}
+
+/* Token display */
+.mygpt-message-tokens {
+  font-size: 0.75rem;
+  color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  background: var(--code-bg);
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+/* 9-dot grid loading animation */
+.mygpt-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 28px;
+  height: 28px;
+  padding: 0.5rem 0;
+}
+
+.mygpt-loading-grid span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  opacity: 0.3;
+  animation: gridWave 1.8s ease-in-out infinite;
+}
+
+/* Sequential wave animation - dot by dot */
+.mygpt-loading-grid span:nth-child(1) { animation-delay: 0s; }
+.mygpt-loading-grid span:nth-child(2) { animation-delay: 0.15s; }
+.mygpt-loading-grid span:nth-child(3) { animation-delay: 0.3s; }
+.mygpt-loading-grid span:nth-child(4) { animation-delay: 0.15s; }
+.mygpt-loading-grid span:nth-child(5) { animation-delay: 0.3s; }
+.mygpt-loading-grid span:nth-child(6) { animation-delay: 0.45s; }
+.mygpt-loading-grid span:nth-child(7) { animation-delay: 0.3s; }
+.mygpt-loading-grid span:nth-child(8) { animation-delay: 0.45s; }
+.mygpt-loading-grid span:nth-child(9) { animation-delay: 0.6s; }
+
+@keyframes gridWave {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+/* Input wrapper - Native feel with safe area */
+.mygpt-input-wrapper {
+  border-top: 1px solid var(--border);
+  padding: 0.625rem 1rem;
+  padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.mygpt-input-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.mygpt-input-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  flex: 1;
+  min-width: 0;
+}
+
+.mygpt-input {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.625rem 0.875rem;
+  color: var(--fg);
+  font-size: 0.9375rem;
+  font-family: var(--body-font), system-ui, sans-serif;
+  resize: none;
+  min-height: 40px;
+  max-height: 120px;
+  line-height: 1.4;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+.mygpt-input:focus {
+  outline: none;
+  border-color: var(--fg);
+  background: var(--code-bg);
+}
+
+.mygpt-input::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.mygpt-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Clear button */
+.mygpt-clear {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mygpt-clear:hover:not(:disabled) {
+  color: var(--fg);
+  border-color: var(--fg);
+  background: var(--code-bg);
+}
+
+.mygpt-clear:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.mygpt-clear:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Send button */
+.mygpt-send {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--fg);
+  color: var(--bg);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mygpt-send:hover:not(:disabled) {
+  transform: scale(1.08);
+  opacity: 0.9;
+}
+
+.mygpt-send:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.mygpt-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Desktop optimizations */
+@media (min-width: 768px) {
+  .mygpt-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .mygpt-messages {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .mygpt-input-wrapper {
+    padding: 1rem 1.5rem;
+  }
+
+  .mygpt-back {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mygpt-title {
+    font-size: 1.25rem;
+  }
+
+  .mygpt-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .mygpt-status {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .mygpt-message-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.75rem;
+  }
+
+  .mygpt-message-content {
+    padding: 0.875rem 1.125rem;
+    font-size: 1rem;
+  }
+
+  .mygpt-send:hover:not(:disabled) {
+    transform: scale(1.08);
+  }
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 767px) {
+  .mygpt-container {
+    /* Prevent iOS safari bottom bar issues */
+    height: 100vh;
+    height: -webkit-fill-available;
+  }
+
+  .mygpt-messages {
+    /* Better touch scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mygpt-input {
+    /* Prevent zoom on focus in iOS */
+    font-size: 16px;
+  }
+
+  /* Hide hint on very small screens */
+  .mygpt-hint {
+    display: none;
+  }
+}
+
+/* Prevent text selection and touch callout for better native feel */
+.mygpt-header,
+.mygpt-status,
+.mygpt-send {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Enable text selection in messages */
+.mygpt-message-content {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 /* ============================================
@@ -1557,7 +2439,7 @@ html[data-theme="light"] .syslink-overlay-stats {
 
 .syslink-grid {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.5rem;
   margin-top: 0.5rem;
   opacity: 0;
   transform: translateY(12px);
@@ -1602,17 +2484,13 @@ html[data-theme="light"] .syslink-overlay-stats {
   .syslink-card--procs {
     grid-column: span 5;
   }
-
-  .syslink-card--heat {
-    grid-column: span 7;
-  }
 }
 
 .syslink-card {
   background: var(--sys-panel);
   border: 1px solid var(--sys-border);
-  border-radius: 16px;
-  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  padding: 0.75rem 0.875rem;
   overflow: hidden;
 }
 
@@ -1620,8 +2498,8 @@ html[data-theme="light"] .syslink-overlay-stats {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 0.75rem;
+  gap: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .syslink-card-title {
@@ -1643,14 +2521,14 @@ html[data-theme="light"] .syslink-overlay-stats {
 .syslink-specs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .syslink-spec-row {
   display: flex;
-  gap: 12px;
-  font-size: 11px;
-  line-height: 1.4;
+  gap: 10px;
+  font-size: 10.5px;
+  line-height: 1.35;
 }
 
 .syslink-spec-key {
@@ -1675,7 +2553,7 @@ html[data-theme="light"] .syslink-overlay-stats {
 }
 
 .syslink-kpi-value {
-  font-size: 44px;
+  font-size: 36px;
   line-height: 1;
   font-weight: 800;
   letter-spacing: -0.05em;
@@ -1684,15 +2562,15 @@ html[data-theme="light"] .syslink-overlay-stats {
 }
 
 .syslink-kpi-unit {
-  font-size: 18px;
+  font-size: 16px;
   color: var(--sys-muted);
   margin-left: 2px;
   font-weight: 500;
 }
 
 .syslink-kpi-meta {
-  margin-top: 8px;
-  font-size: 10px;
+  margin-top: 6px;
+  font-size: 9.5px;
   color: var(--sys-muted);
   letter-spacing: 0.02em;
 }
@@ -1700,20 +2578,20 @@ html[data-theme="light"] .syslink-overlay-stats {
 /* CPU Cores */
 .syslink-cores {
   display: flex;
-  gap: 6px;
-  margin-top: 12px;
+  gap: 5px;
+  margin-top: 8px;
   flex-wrap: wrap;
 }
 
 .syslink-core {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
   background: linear-gradient(to top, var(--sys-accent) var(--pct, 0%), rgba(255,255,255,0.06) var(--pct, 0%));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 600;
   color: var(--sys-text);
 }
@@ -1722,8 +2600,8 @@ html[data-theme="light"] .syslink-overlay-stats {
 .syslink-net-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .syslink-net-stat {
@@ -1746,7 +2624,7 @@ html[data-theme="light"] .syslink-overlay-stats {
 }
 
 .syslink-net-value {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.04em;
   color: var(--sys-text);
@@ -1764,8 +2642,8 @@ html[data-theme="light"] .syslink-overlay-stats {
 .syslink-disk-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .syslink-disk-label {
@@ -1777,7 +2655,7 @@ html[data-theme="light"] .syslink-overlay-stats {
 }
 
 .syslink-disk-value {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.04em;
   color: var(--sys-text);
@@ -1786,17 +2664,17 @@ html[data-theme="light"] .syslink-overlay-stats {
 
 /* Sparklines */
 .syslink-spark {
-  width: 140px;
-  height: 50px;
+  width: 120px;
+  height: 42px;
   display: block;
-  border-radius: 10px;
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.02);
   flex-shrink: 0;
 }
 
 .syslink-spark--wide {
   width: 100%;
-  height: 60px;
+  height: 50px;
 }
 
 /* Processes */

@@ -2,9 +2,27 @@
 layout: layouts/base.njk
 ---
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ title }}",
+  "description": "{{ description or title }}",
+  "datePublished": "{{ date | rssDate }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ site.author or site.name }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site.name }}"
+  }
+}
+</script>
+
 <article class="post post-enter">
   <header class="post-head">
-    <h2 class="post-section-title">thinking out loud</h2>
+    <h2 class="post-section-title"><a href="/blog/" aria-label="Blog">thinking out loud</a></h2>
     <h1 class="post-title">{{ title }}</h1>
     {% if date %}<p class="post-meta">{{ date | readableDate }}</p>{% endif %}
   </header>
