@@ -3,90 +3,92 @@
 
   const API_BASE = 'https://hewlett.tail16475c.ts.net';
   const API_ENDPOINT = `${API_BASE}/api/generate`;
-  const MODEL_NAME = 'amaan-gpt:latest';
+  const MODEL_NAME = 'hermes3:3b';
 
   const elements = {
     messages: document.getElementById('mygpt-messages'),
     form: document.getElementById('mygpt-form'),
     input: document.getElementById('mygpt-input'),
     send: document.getElementById('mygpt-send'),
-    clear: document.getElementById('mygpt-clear'),
     status: document.getElementById('mygpt-status'),
   };
 
   let isGenerating = false;
   let currentChunkTimeout = null;
-  const STORAGE_KEY = 'mygpt-conversation';
   let conversationMessages = [];
-
-  // Message persistence
-  function saveConversation() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversationMessages));
-  }
-
-  function loadConversation() {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const messages = JSON.parse(stored);
-        if (messages && messages.length > 0) {
-          // Hide welcome screen
-          const welcomeMsg = elements.messages.querySelector('.mygpt-welcome');
-          if (welcomeMsg) {
-            welcomeMsg.style.display = 'none';
-          }
-          
-          // Restore messages
-          messages.forEach(msg => {
-            const msgEl = createMessage(msg.content, msg.role);
-            if (msg.tokens) {
-              msgEl.dataset.tokens = msg.tokens;
-            }
-            elements.messages.appendChild(msgEl);
-          });
-          
-          conversationMessages = messages;
-          scrollToBottom(false);
-        }
-      }
-    } catch (error) {
-      console.error('Error loading conversation:', error);
-    }
-  }
-
-  function addToConversation(content, role, tokens = null) {
-    const msg = { content, role };
-    if (tokens) msg.tokens = tokens;
-    conversationMessages.push(msg);
-    saveConversation();
-  }
 
   // Modal management
   function initializeModal() {
     const modal = document.getElementById('mygpt-modal');
     const overlay = document.getElementById('mygpt-modal-overlay');
-    const closeBtn = document.getElementById('mygpt-modal-close');
     const dismissBtn = document.getElementById('mygpt-modal-dismiss');
+    const infoBtn = document.getElementById('mygpt-info-btn');
+    let lastFocusedElement = null;
     
-    const hasSeenModal = localStorage.getItem('mygpt-modal-dismissed');
+    // Gracefully handle if modal elements don't exist
+    if (!modal || !overlay || !dismissBtn) return;
     
-    if (!hasSeenModal) {
-      // Show modal on first visit
-      setTimeout(() => {
-        overlay.classList.add('mygpt-modal-active');
-        modal.classList.add('mygpt-modal-active');
-      }, 300);
+    // Show modal every time the page loads
+    setTimeout(() => {
+      openModal();
+    }, 300);
+    
+    function openModal() {
+      lastFocusedElement = document.activeElement;
+      overlay.classList.add('mygpt-modal-active');
+      modal.classList.add('mygpt-modal-active');
+      overlay.setAttribute('aria-hidden', 'false');
+      modal.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
     }
     
     function closeModal() {
       overlay.classList.remove('mygpt-modal-active');
       modal.classList.remove('mygpt-modal-active');
-      localStorage.setItem('mygpt-modal-dismissed', 'true');
+      overlay.setAttribute('aria-hidden', 'true');
+      modal.setAttribute('aria-hidden', 'true');
+      if (lastFocusedElement && lastFocusedElement !== document.body) {
+        lastFocusedElement.focus();
+      }
     }
     
-    closeBtn.addEventListener('click', closeModal);
-    dismissBtn.addEventListener('click', closeModal);
+    // ESC key handler
+    function handleEscape(e) {
+      if (e.key === 'Escape' && modal.classList.contains('mygpt-modal-active')) {
+        closeModal();
+      }
+    }
+    
+    // Focus trap
+    function trapFocus(e) {
+      if (!modal.classList.contains('mygpt-modal-active')) return;
+      
+      const focusableElements = modal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    }
+    
+    if (dismissBtn) dismissBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', closeModal);
+    document.addEventListener('keydown', handleEscape);
+    document.addEventListener('keydown', trapFocus);
+    
+    // Info button opens modal
+    if (infoBtn) {
+      infoBtn.addEventListener('click', openModal);
+    }
   }
 
   // Status management (gracefully handle missing status UI)
@@ -225,26 +227,21 @@
     }
   }
 
-  // Create loading indicator (9-dot grid animation)
+  // Create loading indicator with "thinking" text
   function createLoadingIndicator() {
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'mygpt-message mygpt-message--assistant mygpt-message--loading';
     loadingDiv.id = 'loading-indicator';
     
-    const dotsGrid = document.createElement('div');
-    dotsGrid.className = 'mygpt-loading-grid';
+    const thinkingSpan = document.createElement('span');
+    thinkingSpan.className = 'mygpt-thinking';
+    thinkingSpan.textContent = 'thinking';
     
-    // Create 9 dots in a 3x3 grid
-    for (let i = 0; i < 9; i++) {
-      const dot = document.createElement('span');
-      dotsGrid.appendChild(dot);
-    }
-    
-    loadingDiv.appendChild(dotsGrid);
+    loadingDiv.appendChild(thinkingSpan);
     return loadingDiv;
   }
 
-  // Smooth text reveal animation with word-by-word blur effect
+  // Smooth text reveal animation
   function revealText(element, newText, delay = 0) {
     return new Promise((resolve) => {
       if (currentChunkTimeout) {
@@ -252,37 +249,8 @@
       }
 
       currentChunkTimeout = setTimeout(() => {
-        // Get the current text and split into words
-        const currentText = element.textContent || '';
-        const currentWords = currentText.split(/\s+/).filter(w => w);
-        const newWords = newText.split(/\s+/).filter(w => w);
-        
-        // Find new words that need to be added
-        if (newWords.length > currentWords.length) {
-          // Clear element and rebuild with all words
-          element.innerHTML = '';
-          
-          // Add all words
-          newWords.forEach((word, index) => {
-            const wordSpan = document.createElement('span');
-            wordSpan.textContent = word;
-            
-            // Add blur animation class to new words
-            if (index >= currentWords.length) {
-              wordSpan.className = 'mygpt-word-reveal';
-            }
-            
-            element.appendChild(wordSpan);
-            
-            // Add space after word (except last word)
-            if (index < newWords.length - 1) {
-              element.appendChild(document.createTextNode(' '));
-            }
-          });
-        } else {
-          // Just update text if no new words (final update)
-          element.textContent = newText;
-        }
+        // Simply update the text content - no complex DOM manipulation
+        element.textContent = newText;
         
         // Trigger smooth scroll as text appears
         requestAnimationFrame(() => {
@@ -307,7 +275,7 @@
     // Add user message
     const userMessage = createMessage(message, 'user');
     elements.messages.appendChild(userMessage);
-    addToConversation(message, 'user');
+    conversationMessages.push({ content: message, role: 'user' });
     scrollToBottom();
 
     // Clear input
@@ -325,6 +293,20 @@
     elements.messages.appendChild(loadingIndicator);
     scrollToBottom();
 
+    // Set timeout to show "hold on" message after 5 seconds
+    let longGenerationShown = false;
+    const longGenerationTimeout = setTimeout(() => {
+      if (isGenerating && loadingIndicator.parentNode) {
+        // Replace or update the loading indicator
+        const thinkingSpan = loadingIndicator.querySelector('.mygpt-thinking');
+        if (thinkingSpan) {
+          thinkingSpan.innerHTML = `thinking<br><span style="font-size: 0.75rem; margin-top: 0.5rem; display: block; opacity: 0.7;">hold on... this model takes a moment to think deeply. it's processing your question carefully.</span>`;
+          scrollToBottom();
+          longGenerationShown = true;
+        }
+      }
+    }, 5000);
+
     try {
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
@@ -341,10 +323,12 @@
       });
 
       if (!response.ok) {
+        clearTimeout(longGenerationTimeout);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       // Remove loading indicator
+      clearTimeout(longGenerationTimeout);
       loadingIndicator.remove();
 
       // Create assistant message
@@ -396,6 +380,7 @@
       }
 
       // Final update to ensure all text is shown
+      clearTimeout(longGenerationTimeout);
       await revealText(textSpan, fullResponse, 0);
       
       // Add token info to message element
@@ -405,11 +390,12 @@
       }
       
       // Save to conversation with token data
-      addToConversation(fullResponse, 'assistant', totalTokens || evalTokens);
+      conversationMessages.push({ content: fullResponse, role: 'assistant', tokens: totalTokens || evalTokens });
       
       setStatus('online');
     } catch (error) {
       console.error('Error:', error);
+      clearTimeout(longGenerationTimeout);
       
       // Remove loading indicator
       const loading = document.getElementById('loading-indicator');
@@ -436,7 +422,6 @@
       isGenerating = false;
       elements.input.disabled = false;
       elements.send.disabled = false;
-      elements.input.focus();
       scrollToBottom();
     }
   }
@@ -448,23 +433,6 @@
     if (message) {
       sendMessage(message);
     }
-  });
-
-  // Handle clear button
-  elements.clear.addEventListener('click', (e) => {
-    e.preventDefault();
-    // Show welcome screen and clear messages
-    const messagesContainer = elements.messages;
-    messagesContainer.innerHTML = `
-      <div class="mygpt-welcome">
-        <h1 class="mygpt-welcome-brand">mygpt</h1>
-        <p class="mygpt-welcome-description">a self-hosted large language model running on my home server. powered by ollama.</p>
-      </div>
-    `;
-    elements.input.value = '';
-    autoResize(elements.input);
-    conversationMessages = [];
-    localStorage.removeItem(STORAGE_KEY);
   });
 
   // Handle textarea input
@@ -480,11 +448,67 @@
     }
   });
 
+  // Mobile keyboard handling - prevent viewport shift
+  function setupMobileKeyboardHandling() {
+    const container = document.querySelector('.mygpt-container');
+    const inputWrapper = document.querySelector('.mygpt-input-wrapper');
+    
+    if (!container || !inputWrapper) return;
+    
+    // Use visualViewport API for better mobile keyboard detection
+    if (window.visualViewport) {
+      let initialHeight = window.visualViewport.height;
+      
+      window.visualViewport.addEventListener('resize', () => {
+        const currentHeight = window.visualViewport.height;
+        const keyboardHeight = initialHeight - currentHeight;
+        
+        if (keyboardHeight > 100) {
+          // Keyboard is open
+          container.style.height = `${currentHeight}px`;
+          document.body.classList.add('keyboard-open');
+          
+          // Scroll to bottom after a small delay
+          setTimeout(() => scrollToBottom(false), 50);
+        } else {
+          // Keyboard is closed
+          container.style.height = '';
+          document.body.classList.remove('keyboard-open');
+        }
+      });
+      
+      window.visualViewport.addEventListener('scroll', () => {
+        // Prevent iOS scroll-to-top behavior
+        if (document.body.classList.contains('keyboard-open')) {
+          window.scrollTo(0, 0);
+        }
+      });
+    }
+    
+    // Prevent page scroll on input focus (iOS Safari)
+    elements.input.addEventListener('focus', () => {
+      // Small delay to let keyboard animate
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      }, 100);
+    });
+    
+    // Handle blur to reset
+    elements.input.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (!document.activeElement || document.activeElement.tagName !== 'TEXTAREA') {
+          window.scrollTo(0, 0);
+        }
+      }, 100);
+    });
+  }
+
   // Initialize
   initializeModal();
-  loadConversation();
   checkAPI();
-  elements.input.focus();
+  setupMobileKeyboardHandling();
 
   // Periodic health check
   setInterval(checkAPI, 30000); // Check every 30 seconds

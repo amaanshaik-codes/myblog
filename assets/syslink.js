@@ -2,27 +2,12 @@
   const root = document.getElementById('syslink');
   if (!root) return;
 
-  const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-
   // Element cache
   const $ = (id) => document.getElementById(id);
   const els = {
-    logstream: $('syslink-logstream'),
-    logsInner: $('syslink-logs-inner'),
-    overlay: $('syslink-overlay'),
     status: $('syslink-status'),
     grid: $('syslink-grid'),
     metabar: $('syslink-metabar'),
-
-    // Boot
-    bootLine1: $('boot-line-1'),
-    bootCmd1: $('boot-cmd-1'),
-    bootCursor1: $('boot-cursor-1'),
-
-    // Overlay stats
-    overlayCpu: $('sys-overlay-cpu'),
-    overlayRam: $('sys-overlay-ram'),
-    overlayNet: $('sys-overlay-net'),
 
     // Meta bar
     metaUptime: $('sys-meta-uptime'),
@@ -64,34 +49,8 @@
     heatmap: $('heatmap-48h'),
 
     // Layout helpers
-    terminalWrap: $('syslink-terminal'),
     timeline: $('syslink-timeline')
   };
-
-  // Terminal / timeline stickiness: attach observer that toggles `.syslink-terminal--sticky`
-  function initTerminalStickyObserver() {
-    const t = els.terminalWrap;
-    const tl = els.timeline;
-    if (!t || !tl || !('IntersectionObserver' in window)) return;
-
-    // Ensure terminal starts non-sticky
-    t.classList.remove('syslink-terminal--sticky');
-
-    const obs = new IntersectionObserver((entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting) {
-          // When timeline enters the viewport, make the terminal sticky
-          t.classList.add('syslink-terminal--sticky');
-        } else {
-          // remove stickiness when timeline leaves view
-          t.classList.remove('syslink-terminal--sticky');
-        }
-      }
-    }, { threshold: 0.1 });
-
-    obs.observe(tl);
-  }
-
 
   // WebSocket config
   const WS_URL = root.getAttribute('data-ws-url') || 'wss://hewlett.tail16475c.ts.net/';
@@ -148,104 +107,6 @@
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fb;
   }
 
-  // Boot sequence animation
-  async function runBootSequence() {
-    if (bootComplete) return;
-    
-    const cmds = [
-      { text: 'ssh hewlett@tailnet', delay: 400 },
-      { text: './monitor.sh --stream', delay: 600 }
-    ];
-
-    for (let i = 0; i < cmds.length; i++) {
-      const cmd = cmds[i];
-      const target = els.bootCmd1;
-      const cursor = els.bootCursor1;
-      
-      if (!target || !cursor) break;
-
-      // Type command
-      if (prefersReducedMotion) {
-        target.textContent = cmd.text;
-      } else {
-        for (let j = 0; j < cmd.text.length; j++) {
-          target.textContent += cmd.text[j];
-          await sleep(18 + Math.random() * 12);
-        }
-      }
-
-      await sleep(cmd.delay);
-
-      // After first command, add response and new prompt
-      if (i === 0) {
-        addLogLine('Connecting to hewlett.tail16475c.ts.net...', 'info');
-        await sleep(300);
-        addLogLine('Connection established.', 'success');
-        await sleep(200);
-        addLogLine(`Last login: ${new Date().toLocaleString()}`, 'dim');
-        await sleep(150);
-        addLogLine('', 'blank');
-        
-        // New prompt for next command
-        const newLine = document.createElement('div');
-        newLine.className = 'syslink-log syslink-log--boot';
-        newLine.innerHTML = `<span class="log-prompt">hewlett@hewlett:~$</span> <span class="log-cmd" id="boot-cmd-2"></span><span class="log-cursor" id="boot-cursor-2">█</span>`;
-        els.logsInner?.appendChild(newLine);
-        
-        // Update refs
-        els.bootCmd1 = $('boot-cmd-2');
-        els.bootCursor1 = $('boot-cursor-2');
-        $('boot-cursor-1')?.classList.add('hide');
-      }
-    }
-
-    // Final messages before stream starts
-    addLogLine('Initializing telemetry stream...', 'info');
-    bootComplete = true;
-  }
-
-  function sleep(ms) {
-    return new Promise(r => setTimeout(r, ms));
-  }
-
-  function addLogLine(text, type = 'data') {
-    if (!els.logsInner) return;
-
-    const line = document.createElement('div');
-    line.className = `syslink-log syslink-log--${type}`;
-    
-    if (type === 'blank') {
-      line.innerHTML = '&nbsp;';
-    } else if (type === 'data') {
-      // Data log format
-      const ts = new Date().toTimeString().slice(0, 8);
-      line.innerHTML = `<span class="log-ts">[${ts}]</span> <span class="log-data">${escapeHtml(text)}</span>`;
-    } else {
-      line.textContent = text;
-    }
-
-    els.logsInner.appendChild(line);
-    logCount++;
-
-    // Smooth scroll animation
-    if (!prefersReducedMotion) {
-      requestAnimationFrame(() => {
-        if (els.logstream) {
-          els.logstream.scrollTo({
-            top: els.logstream.scrollHeight,
-            behavior: 'smooth'
-          });
-        }
-      });
-    } else {
-      els.logstream?.scrollTo(0, els.logstream.scrollHeight);
-    }
-
-    // Prune old logs (keep last 100)
-    while (els.logsInner.children.length > 100) {
-      els.logsInner.removeChild(els.logsInner.firstChild);
-    }
-  }
 
   // Canvas setup
   function setupCanvas(canvas) {
@@ -453,7 +314,6 @@
     ws.onopen = () => {
       reconnectAttempts = 0;
       setStatus('connected', 'ok');
-      runBootSequence();
     };
 
     ws.onmessage = (e) => {
@@ -679,6 +539,5 @@
   });
 
   // Start
-  initTerminalStickyObserver();
   connect();
 })();

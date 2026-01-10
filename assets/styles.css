@@ -76,14 +76,12 @@ html, body {
 }
 
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: 'Libertinus Serif', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* Use Geist if available but keep Lora for headings */
-  font-family: var(--body-font), system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 a {
@@ -704,31 +702,16 @@ html[data-theme="dark"] .stamp-avatar {
   border-bottom-color: var(--fg);
 }
 
-/* Geist font loading tweaks */
-@font-face {
-  font-family: 'Geist Sans';
-  src: url('/assets/fonts/GeistSans.woff2') format('woff2');
-  font-weight: 300 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Geist Mono';
-  src: url('/assets/fonts/GeistMono.woff2') format('woff2');
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
-}
-
+/* Font variable definitions */
 :root {
-  --body-font: 'Geist Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --mono-font: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --body-font: 'Libertinus Serif', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --heading-font: 'Lora', serif;
+  --mono-font: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 html.fonts-loaded body {
   font-family: var(--body-font);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   line-height: 1.65;
 }
 
@@ -922,6 +905,7 @@ main {
   margin: 0;
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
 
 .writing-link {
@@ -929,17 +913,18 @@ main {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 0.5rem;
   padding: 12px 0;
   text-decoration: none;
   color: inherit;
   flex-wrap: wrap; /* allow title to wrap onto next line if needed */
+  border-bottom: 1px solid transparent;
 }
 
 @media (min-width: 640px) {
   .writing-link {
     align-items: baseline;
-    gap: 20px;
+    gap: 0.5rem;
     padding: 16px 0;
   }
 }
@@ -1110,10 +1095,10 @@ article.post {
   line-height: 1.25;
 }
 
-.post-content p { margin: 1rem 0; }
+.post-content p { margin: 1.5rem 0; }
 
 .post-content blockquote {
-  margin: 1.25rem 0;
+  margin: 1.5rem 0;
   padding: 0.25rem 1rem;
   border-left: 3px solid var(--border);
   color: var(--muted);
@@ -1124,7 +1109,7 @@ article.post {
 .post-content hr {
   border: 0;
   border-top: 1px solid var(--border);
-  margin: 2rem 0;
+  margin: 2.5rem 0;
 }
 
 .post-content pre {
@@ -1134,6 +1119,7 @@ article.post {
   border-radius: 8px;
   background: var(--code-bg);
   font-size: 0.9rem;
+  margin: 1.5rem 0;
 }
 
 .post-content code {
@@ -1153,16 +1139,16 @@ article.post {
   display: block;
   border-radius: 10px;
   border: 1px solid var(--border);
-  margin: 1.25rem 0;
+  margin: 1.5rem 0;
 }
 
 .post-content ul,
 .post-content ol {
   padding-left: 1.25rem;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
 }
 
-.post-content li { margin: 0.35rem 0; }
+.post-content li { margin: 0.25rem 0; }
 
 @media (min-width: 480px) {
   header.site-header { padding: 2.25rem 0 1.5rem; }
@@ -1262,7 +1248,15 @@ footer.site-footer {
   color: var(--fg);
 }
 
-.is-mygpt-page .theme-toggle:focus-visible {
+/* ============================================
+   SYSLINK PAGE - HIDE DECORATIVE HEADER ELEMENTS
+   ============================================ */
+
+.is-syslink-page .stamp-header,
+.is-syslink-page .stamp-avatar,
+.is-syslink-page .stamp-ring {
+  display: none !important;
+}.is-mygpt-page .theme-toggle:focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 2px;
 }
@@ -1280,249 +1274,107 @@ footer.site-footer {
 }
 
 /* ============================================
-   MYGPT PAGE STYLES - Native App Experience
+   MYGPT PAGE STYLES - Minimalist Design
    ============================================ */
 
-/* Container - Full viewport, no scrolling issues */
+/* Container - Full viewport */
 .mygpt-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  height: 100dvh; /* Dynamic viewport height for mobile */
+  height: 100dvh;
   max-width: 100%;
   margin: 0;
   padding: 0;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   overflow: hidden;
   background: var(--bg);
-  -webkit-overflow-scrolling: touch;
 }
 
-/* Header - Sticky with backdrop blur */
-.mygpt-header {
-  border-bottom: 1px solid var(--border);
-  padding: 0.875rem 1rem;
-  background: rgba(15, 15, 15, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  flex-shrink: 0;
-}
-
-.mygpt-header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.mygpt-header-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1;
-  min-width: 0;
-}
-
-.mygpt-back {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  color: var(--fg);
-  text-decoration: none;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.mygpt-back:hover {
-  background: var(--border);
-  opacity: 1;
-}
-
-.mygpt-back:active {
-  transform: scale(0.95);
-}
-
-.mygpt-title-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-  min-width: 0;
-  flex: 1;
-}
-
-.mygpt-title {
-  font-family: var(--body-font), system-ui, sans-serif;
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 0;
-  color: var(--fg);
-  letter-spacing: -0.02em;
-}
-
-.mygpt-subtitle {
-  font-size: 0.6875rem;
-  color: var(--muted);
-  font-family: var(--mono-font), monospace;
-  letter-spacing: 0;
-}
-
-.mygpt-status {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.6875rem;
-  color: var(--muted);
-  padding: 0.375rem 0.625rem;
-  border-radius: 12px;
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  flex-shrink: 0;
-  font-family: var(--mono-font), monospace;
-}
-
-.mygpt-status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--muted);
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.mygpt-status[data-status="online"] .mygpt-status-dot {
-  background: #27ca40;
-  box-shadow: 0 0 8px rgba(39, 202, 64, 0.4);
-}
-
-.mygpt-status[data-status="offline"] .mygpt-status-dot {
-  background: #ff5f56;
-  animation: none;
-}
-
-.mygpt-status[data-status="generating"] .mygpt-status-dot {
-  background: #3b82f6;
-  animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
-}
-
-@keyframes pulse {
-  0%, 100% { 
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% { 
-    opacity: 0.5;
-    transform: scale(0.95);
-  }
-}
-
-/* Messages - Smooth scrolling with momentum */
+/* Messages area */
 .mygpt-messages {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  /* Add top padding to avoid overlap with fixed back button */
-  padding: calc(1.25rem + max(1.5rem, env(safe-area-inset-top, 0px) + 0.5rem)) 1rem 1.25rem 1rem;
+  padding: calc(4rem + env(safe-area-inset-top)) 1.5rem 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 2.5rem;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
 }
 
-/* Hide header content on mygpt page (title, subtitle, status) — we keep only the global back-button */
+.mygpt-messages::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+/* Hide header on mygpt page */
 .is-mygpt-page .mygpt-header {
   display: none !important;
 }
 
-/* spacer to ensure consistent spacing when header removed */
-.mygpt-top-spacer {
-  height: calc(max(1.5rem, env(safe-area-inset-top, 0px) + 0.5rem));
-  flex-shrink: 0;
-}
-
-.mygpt-messages::-webkit-scrollbar {
-  width: 6px;
-}
-
-.mygpt-messages::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.mygpt-messages::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
-
-.mygpt-messages::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
-}
-
-/* Welcome screen - minimal Grok-style */
+/* Welcome screen - centered, minimal */
 .mygpt-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 3rem 1rem;
-  max-width: 500px;
-  margin: auto;
+  flex: 1;
+  min-height: 40vh;
+  gap: 0.75rem;
   opacity: 0;
-  animation: fadeIn 0.6s ease-out 0.2s forwards;
+  animation: fadeIn 0.5s ease 0.1s forwards;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; }
 }
 
-/* mygpt branding in Lora */
-.mygpt-welcome-brand {
-  font-family: 'Lora', serif;
-  font-size: 3rem;
-  font-weight: 600;
-  margin: 0 0 1.5rem 0;
-  color: var(--fg);
-  letter-spacing: -0.04em;
-}
-
-.mygpt-welcome-description {
+.mygpt-welcome-icon {
+  font-size: 1.5rem;
   color: var(--muted);
-  font-size: 1rem;
-  margin: 0;
-  line-height: 1.7;
-  font-weight: 400;
+  margin-bottom: 0.5rem;
 }
 
-/* Modal - Model Information */
+.mygpt-welcome-text {
+  font-size: 1.125rem;
+  color: var(--muted);
+  font-family: var(--body-font);
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.mygpt-info-link {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-family: var(--mono-font);
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.mygpt-info-link:hover {
+  opacity: 1;
+}
+
+/* Modal - Minimal */
 .mygpt-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s;
   z-index: 998;
 }
 
@@ -1535,28 +1387,29 @@ footer.site-footer {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.95);
+  transform: translate(-50%, -48%);
   opacity: 0;
   pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
   z-index: 999;
-  max-width: 90%;
-  width: 100%;
+  width: calc(100% - 3rem);
+  max-width: 360px;
 }
 
 .mygpt-modal.mygpt-modal-active {
   opacity: 1;
   pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%);
 }
 
 .mygpt-modal-content {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   position: relative;
+  text-align: center;
+  max-width: 380px;
 }
 
 .mygpt-modal-close {
@@ -1572,8 +1425,8 @@ footer.site-footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  border-radius: 50%;
+  transition: all 0.15s;
 }
 
 .mygpt-modal-close:hover {
@@ -1581,76 +1434,104 @@ footer.site-footer {
   color: var(--fg);
 }
 
+.mygpt-modal-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--muted);
+}
+
 .mygpt-modal-title {
-  font-family: 'Lora', serif;
+  font-family: var(--heading-font);
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 400;
   margin: 0 0 1.5rem 0;
   color: var(--fg);
+  letter-spacing: -0.02em;
 }
 
 .mygpt-modal-body {
-  color: var(--fg);
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  margin: 0 0 1.5rem 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
+  font-family: var(--body-font);
+  text-align: left;
 }
 
 .mygpt-modal-body p {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.25rem 0;
 }
 
-.mygpt-modal-body p:last-child {
-  margin: 0;
-}
-
-.mygpt-modal-body strong {
+.mygpt-modal-body a {
   color: var(--fg);
-  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.mygpt-modal-body a:hover {
+  opacity: 0.7;
+}
+
+.mygpt-modal-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.mygpt-modal-feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--fg);
+}
+
+.mygpt-modal-feature-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--muted);
+  stroke: currentColor;
 }
 
 .mygpt-modal-action {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1.5rem;
+  margin-top: 1.5rem;
   background: var(--fg);
   color: var(--bg);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.9375rem;
   font-weight: 500;
+  font-family: var(--body-font);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s;
 }
 
 .mygpt-modal-action:hover {
+  opacity: 0.9;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .mygpt-modal-action:active {
   transform: translateY(0);
 }
 
-/* Message - Minimal Grok-style */
+/* Messages */
 .mygpt-message {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
   width: 100%;
+  animation: messageIn 0.3s ease;
 }
 
-/* User messages align right with bubble */
-.mygpt-message--user {
-  align-items: flex-end;
-}
-
-@keyframes messageSlideIn {
+@keyframes messageIn {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -1658,94 +1539,72 @@ footer.site-footer {
   }
 }
 
-/* User bubble - pill style like Grok */
-.mygpt-user-bubble {
-  display: inline-block;
-  padding: 0.75rem 1rem;
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  color: var(--fg);
-  font-size: 0.9375rem;
-  line-height: 1.5;
-  max-width: 85%;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+/* User message - right aligned, subtle background */
+.mygpt-message--user {
+  align-items: flex-end;
 }
 
-/* AI response - plain text, no card */
+.mygpt-user-bubble {
+  display: inline-block;
+  padding: 0.875rem 1.125rem;
+  background: var(--code-bg);
+  border-radius: 16px;
+  border-bottom-right-radius: 4px;
+  color: var(--fg);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 85%;
+  font-family: var(--body-font);
+}
+
+/* AI message - left aligned, no background */
 .mygpt-message--assistant {
-  padding-left: 0;
+  align-items: flex-start;
 }
 
 .mygpt-message-text {
-  display: block;
   color: var(--fg);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 0.9375rem;
+  line-height: 1.8;
   white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  font-family: var(--body-font);
+  max-width: 85%;
 }
 
-/* Word-by-word blur reveal animation */
-.mygpt-word-reveal {
-  display: inline;
-  animation: wordBlurIn 0.3s ease-out forwards;
-}
-
-@keyframes wordBlurIn {
-  0% {
-    filter: blur(4px);
-    opacity: 0;
-  }
-  100% {
-    filter: blur(0px);
-    opacity: 1;
-  }
-}
-
-/* Error state for AI messages */
+/* Error state */
 .mygpt-message--error .mygpt-message-text {
-  color: #ff5f56;
+  color: var(--muted);
 }
 
-/* Message actions (copy button, token display) */
+/* Message actions - appear on hover */
 .mygpt-message-actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--border);
+  gap: 0.5rem;
+  margin-top: 0.75rem;
   opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
+  transition: opacity 0.15s;
 }
 
 .mygpt-message--assistant:hover .mygpt-message-actions {
   opacity: 1;
-  pointer-events: auto;
 }
 
-/* Copy button */
 .mygpt-message-copy {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 28px;
   height: 28px;
-  padding: 0;
   background: transparent;
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--muted);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s;
 }
 
 .mygpt-message-copy:hover {
-  background: var(--code-bg);
   color: var(--fg);
   border-color: var(--fg);
 }
@@ -1755,113 +1614,72 @@ footer.site-footer {
   height: 14px;
 }
 
-/* Copied feedback state */
 .mygpt-message-copy--copied {
-  background: var(--code-bg) !important;
-  color: #27ca40 !important;
-  border-color: #27ca40 !important;
+  color: var(--fg) !important;
+  border-color: var(--fg) !important;
 }
 
-/* Token display */
 .mygpt-message-tokens {
+  font-size: 0.6875rem;
+  color: var(--muted);
+  font-family: var(--mono-font);
+  opacity: 0.6;
+}
+
+/* Thinking indicator */
+.mygpt-thinking {
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-family: var(--mono-font);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* Disclaimer above input */
+.mygpt-disclaimer {
+  text-align: center;
   font-size: 0.75rem;
   color: var(--muted);
-  padding: 0.25rem 0.5rem;
-  background: var(--code-bg);
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  white-space: nowrap;
+  font-family: var(--mono-font);
+  padding: 0.5rem 1rem;
+  opacity: 0.6;
+  letter-spacing: 0.02em;
 }
 
-/* 9-dot grid loading animation */
-.mygpt-loading-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  width: 28px;
-  height: 28px;
-  padding: 0.5rem 0;
-}
-
-.mygpt-loading-grid span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--muted);
-  opacity: 0.3;
-  animation: gridWave 1.8s ease-in-out infinite;
-}
-
-/* Sequential wave animation - dot by dot */
-.mygpt-loading-grid span:nth-child(1) { animation-delay: 0s; }
-.mygpt-loading-grid span:nth-child(2) { animation-delay: 0.15s; }
-.mygpt-loading-grid span:nth-child(3) { animation-delay: 0.3s; }
-.mygpt-loading-grid span:nth-child(4) { animation-delay: 0.15s; }
-.mygpt-loading-grid span:nth-child(5) { animation-delay: 0.3s; }
-.mygpt-loading-grid span:nth-child(6) { animation-delay: 0.45s; }
-.mygpt-loading-grid span:nth-child(7) { animation-delay: 0.3s; }
-.mygpt-loading-grid span:nth-child(8) { animation-delay: 0.45s; }
-.mygpt-loading-grid span:nth-child(9) { animation-delay: 0.6s; }
-
-@keyframes gridWave {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.3);
-  }
-}
-
-/* Input wrapper - Native feel with safe area */
+/* Input wrapper - fixed bottom */
 .mygpt-input-wrapper {
-  border-top: 1px solid var(--border);
-  padding: 0.625rem 1rem;
-  padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
+  padding: 1rem 1.5rem;
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
   background: var(--bg);
+  border-top: 1px solid var(--border);
   flex-shrink: 0;
 }
 
 .mygpt-input-form {
   display: flex;
-  gap: 0.5rem;
   align-items: flex-end;
-  max-width: 900px;
+  gap: 0.75rem;
+  max-width: 720px;
   margin: 0 auto;
-}
-
-.mygpt-input-controls {
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-end;
-  flex: 1;
-  min-width: 0;
 }
 
 .mygpt-input {
   flex: 1;
   background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.625rem 0.875rem;
+  border: none;
+  padding: 0.75rem 0;
   color: var(--fg);
-  font-size: 0.9375rem;
-  font-family: var(--body-font), system-ui, sans-serif;
+  font-size: 1rem;
+  font-family: var(--body-font);
   resize: none;
-  min-height: 40px;
-  max-height: 120px;
-  line-height: 1.4;
-  transition: all 0.2s ease;
+  min-height: 24px;
+  max-height: 150px;
+  line-height: 1.5;
   -webkit-appearance: none;
-  appearance: none;
-  touch-action: manipulation;
 }
 
 .mygpt-input:focus {
   outline: none;
-  border-color: var(--fg);
-  background: var(--code-bg);
 }
 
 .mygpt-input::placeholder {
@@ -1871,187 +1689,180 @@ footer.site-footer {
 
 .mygpt-input:disabled {
   opacity: 0.4;
-  cursor: not-allowed;
 }
 
-/* Clear button */
-.mygpt-clear {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+.mygpt-input-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mygpt-clear,
+.mygpt-send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   background: transparent;
   border: 1px solid var(--border);
   color: var(--muted);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+  transition: all 0.15s;
   -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
 
-.mygpt-clear:hover:not(:disabled) {
+.mygpt-clear:hover,
+.mygpt-send:hover {
   color: var(--fg);
   border-color: var(--fg);
-  background: var(--code-bg);
 }
 
-.mygpt-clear:active:not(:disabled) {
-  transform: scale(0.95);
+.mygpt-clear:active,
+.mygpt-send:active {
+  transform: scale(0.92);
 }
 
-.mygpt-clear:disabled {
+.mygpt-clear:disabled,
+.mygpt-send:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
 
-/* Send button */
-.mygpt-send {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--fg);
-  color: var(--bg);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  flex-shrink: 0;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-.mygpt-send:hover:not(:disabled) {
-  transform: scale(1.08);
-  opacity: 0.9;
-}
-
-.mygpt-send:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-.mygpt-send:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Desktop optimizations */
-@media (min-width: 768px) {
-  .mygpt-header {
-    padding: 1rem 1.5rem;
-  }
-
-  .mygpt-messages {
-    padding: 1.5rem;
-    gap: 1.5rem;
-  }
-
-  .mygpt-input-wrapper {
-    padding: 1rem 1.5rem;
-  }
-
-  .mygpt-back {
-    width: 40px;
-    height: 40px;
-  }
-
-  .mygpt-title {
-    font-size: 1.25rem;
-  }
-
-  .mygpt-subtitle {
-    font-size: 0.75rem;
-  }
-
-  .mygpt-status {
-    font-size: 0.75rem;
-    padding: 0.5rem 0.75rem;
-  }
-
-  .mygpt-message-avatar {
-    width: 36px;
-    height: 36px;
-    font-size: 0.75rem;
-  }
-
-  .mygpt-message-content {
-    padding: 0.875rem 1.125rem;
-    font-size: 1rem;
-  }
-
-  .mygpt-send:hover:not(:disabled) {
-    transform: scale(1.08);
-  }
-}
-
-/* Mobile-specific fixes */
-@media (max-width: 767px) {
+/* Mobile adjustments */
+@media (max-width: 640px) {
   .mygpt-container {
-    /* Prevent iOS safari bottom bar issues */
+    /* Use visual viewport for mobile keyboard handling */
     height: 100vh;
+    height: 100dvh;
     height: -webkit-fill-available;
   }
 
   .mygpt-messages {
-    /* Better touch scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
+    padding: calc(3.5rem + env(safe-area-inset-top)) 1rem 1.5rem;
+    gap: 2rem;
+    /* Prevent overscroll bounce that can interfere with keyboard */
+    overscroll-behavior: none;
+  }
+
+  .mygpt-input-wrapper {
+    padding: 0.75rem 1rem;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    /* Ensure input stays above keyboard */
+    position: relative;
+    z-index: 10;
   }
 
   .mygpt-input {
-    /* Prevent zoom on focus in iOS */
-    font-size: 16px;
+    font-size: 16px; /* Prevent zoom on iOS */
+    /* Prevent iOS from scrolling page on focus */
+    touch-action: manipulation;
   }
 
-  /* Hide hint on very small screens */
-  .mygpt-hint {
-    display: none;
+  .mygpt-user-bubble,
+  .mygpt-message-text {
+    max-width: 90%;
+  }
+  
+  /* Modal mobile styles */
+  .mygpt-modal {
+    width: calc(100% - 2rem);
+    max-width: 100%;
+  }
+  
+  .mygpt-modal-content {
+    padding: 1.5rem;
+    border-radius: 16px;
+    max-width: 100%;
+  }
+  
+  .mygpt-modal-title {
+    font-size: 1.25rem;
+  }
+  
+  .mygpt-modal-body {
+    font-size: 0.875rem;
+  }
+  
+  .mygpt-modal-feature {
+    font-size: 0.8125rem;
+  }
+  
+  /* Smaller buttons on mobile */
+  .mygpt-clear,
+  .mygpt-send {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .mygpt-clear svg,
+  .mygpt-send svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
-/* Prevent text selection and touch callout for better native feel */
-.mygpt-header,
-.mygpt-status,
-.mygpt-send {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
+/* Keyboard open state - managed by JS */
+body.keyboard-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
 }
 
-/* Enable text selection in messages */
-.mygpt-message-content {
-  -webkit-user-select: text;
-  user-select: text;
+body.keyboard-open .mygpt-container {
+  /* Height is set dynamically by JS using visualViewport */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+body.keyboard-open .mygpt-messages {
+  /* Ensure messages don't get pushed up out of view */
+  padding-top: calc(3rem + env(safe-area-inset-top));
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .mygpt-messages {
+    padding: calc(5rem + env(safe-area-inset-top)) 2rem 2.5rem;
+  }
+
+  .mygpt-input-wrapper {
+    padding: 1.25rem 2rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
 }
 
 /* ============================================
    SYS_LINK PAGE STYLES - v2 (Boot → Logs → Bento)
    ============================================ */
 
-.is-syslink-page {
+.is-status-page {
   background: var(--bg);
 }
 
-.is-syslink-page main {
+.is-status-page main {
   padding: 0;
   max-width: 100%;
 }
 
-.is-syslink-page .container {
+.is-status-page .container {
   max-width: 100%;
   padding: 0;
 }
 
-/* Hide stamp header on syslink page */
-.is-syslink-page .stamp-header {
+/* Hide stamp header on status page */
+.is-status-page .stamp-header {
   display: none;
 }
 
 /* Page layout */
-.syslink {
+.status {
   --sys-accent: #27ca40;
   --sys-warn: #ffbd2e;
   --sys-bad: #ff5f56;
@@ -2063,7 +1874,7 @@ footer.site-footer {
   --sys-muted: var(--muted);
 
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  padding: calc(4.5rem + env(safe-area-inset-top)) 0.75rem 2.5rem;
+  padding: calc(5.5rem + env(safe-area-inset-top)) 0.75rem 2.5rem;
   max-width: 1200px;
   margin: 0 auto;
   color: var(--sys-text);
@@ -2071,11 +1882,19 @@ footer.site-footer {
 
 @media (min-width: 768px) {
   .syslink {
-    padding: calc(5rem + env(safe-area-inset-top)) 1.25rem 3rem;
+    padding: calc(6rem + env(safe-area-inset-top)) 1.25rem 3rem;
   }
 }
 
 /* Terminal Window */
+.status-terminal {
+  background: var(--sys-panel);
+  border: 1px solid var(--sys-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: none;
+}
+
 .sys-terminal {
   background: var(--sys-panel);
   border: 1px solid var(--sys-border);
@@ -2086,6 +1905,15 @@ footer.site-footer {
 
 .syslink-terminal {
   position: static;
+}
+
+.status-terminal-header {
+  background: var(--sys-panel-2);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--sys-border);
 }
 
 .sys-terminal-header {
@@ -2112,6 +1940,33 @@ footer.site-footer {
   font-size: 11px;
   color: var(--sys-muted);
   letter-spacing: 0.04em;
+}
+
+.status-pill {
+  margin-left: auto;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--sys-muted);
+  transition: all 180ms ease;
+}
+
+.status-ok {
+  background: rgba(39, 202, 64, 0.15);
+  color: var(--sys-accent);
+}
+
+.status-warn {
+  background: rgba(255, 189, 46, 0.15);
+  color: var(--sys-warn);
+}
+
+.status-error {
+  background: rgba(255, 95, 86, 0.15);
+  color: var(--sys-bad);
 }
 
 .syslink-status-pill {
@@ -2141,6 +1996,24 @@ footer.site-footer {
   color: var(--sys-bad);
 }
 
+.status-terminal-body {
+  position: relative;
+  min-height: 220px;
+  max-height: 320px;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-y: auto;
+  padding: 16px 18px;
+}
+
+@media (min-width: 768px) {
+  .status-terminal-body {
+    min-height: 280px;
+    max-height: 360px;
+    font-size: 14px;
+  }
+}
+
 .sys-terminal-body {
   position: relative;
   min-height: 220px;
@@ -2159,6 +2032,12 @@ footer.site-footer {
 }
 
 /* Log Stream */
+.status-logstream {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .syslink-logstream {
   position: absolute;
   inset: 0;
@@ -2168,10 +2047,25 @@ footer.site-footer {
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 92%, transparent 100%);
 }
 
-.syslink-logs-inner {
+.status-logs-inner {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.status-log {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: none;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .status-log {
+    font-size: 14px;
+  }
 }
 
 .syslink-log {
@@ -2197,6 +2091,34 @@ footer.site-footer {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.status-log--boot {
+  color: var(--sys-text);
+}
+
+.status-log--info {
+  color: var(--sys-muted);
+}
+
+.status-log--success {
+  color: var(--sys-accent);
+}
+
+.status-log--dim {
+  color: var(--sys-muted);
+  opacity: 0.6;
+}
+
+.status-log--data {
+  color: var(--sys-muted);
+  font-size: 13px;
+}
+
+@media (min-width: 768px) {
+  .status-log--data {
+    font-size: 14px;
   }
 }
 
@@ -2259,6 +2181,51 @@ footer.site-footer {
 .log-data {
   color: var(--sys-muted);
   font-weight: 500;
+}
+
+/* Live mode indicator */
+.status--live {
+}
+
+.status-metabar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  padding: 1rem 0.5rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 200ms ease, transform 240ms ease;
+}
+
+.status-metabar.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.status-meta-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-meta-label {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sys-muted);
+}
+
+.status-meta-value {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--sys-text);
+}
+
+@media (min-width: 768px) {
+  .status-meta-value {
+    font-size: 16px;
+  }
 }
 
 /* Blur Overlay with Stats */
@@ -2391,15 +2358,43 @@ html[data-theme="light"] .syslink-overlay-stats {
   }
 }
 
+/* Page Header */
+.syslink-page-header {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.syslink-page-title {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--sys-text);
+  font-family: var(--heading-font);
+  line-height: 1.2;
+}
+
+@media (max-width: 640px) {
+  .syslink-page-header {
+    padding: 2rem 1rem 1.5rem;
+  }
+  
+  .syslink-page-title {
+    font-size: 32px;
+  }
+}
+
 /* Meta Bar */
 .syslink-metabar {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem 1.5rem;
-  padding: 1rem 0.5rem;
+  gap: 2rem 2.5rem;
+  padding: 1.5rem 0.5rem;
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 200ms ease, transform 240ms ease;
+  font-family: var(--mono-font);
 }
 
 .syslink-metabar.is-visible {
@@ -2414,17 +2409,19 @@ html[data-theme="light"] .syslink-overlay-stats {
 }
 
 .syslink-meta-label {
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--sys-muted);
+  font-weight: 500;
 }
 
 .syslink-meta-value {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--sys-text);
+  letter-spacing: -0.01em;
+  color: var(--sys-accent);
+  font-family: var(--mono-font);
 }
 
 @media (min-width: 768px) {
@@ -2434,13 +2431,293 @@ html[data-theme="light"] .syslink-overlay-stats {
 }
 
 /* ============================================
-   BENTO GRID
+   INFO GRID
    ============================================ */
 
-.syslink-grid {
+.status-grid {
   display: grid;
   gap: 0.5rem;
   margin-top: 0.5rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 280ms ease, transform 300ms ease;
+}
+
+.status-grid:not([hidden]) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.status--live .status-grid {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (min-width: 860px) {
+  .status-grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+
+  .status-card--specs {
+    grid-column: span 5;
+  }
+
+  .status-card--kpi {
+    grid-column: span 7;
+  }
+
+  .status-card--kpi:nth-of-type(3) {
+    grid-column: span 6;
+  }
+
+  .status-card--net {
+    grid-column: span 6;
+  }
+
+  .status-card--disk {
+    grid-column: span 6;
+  }
+
+  .status-card--procs {
+    grid-column: span 5;
+  }
+}
+
+.status-card {
+  background: var(--sys-panel);
+  border: 1px solid var(--sys-border);
+  border-radius: 12px;
+  padding: 0.75rem 0.875rem;
+  overflow: hidden;
+}
+
+.status-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.status-card-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sys-text);
+}
+
+.status-card-sub {
+  font-size: 10px;
+  color: var(--sys-muted);
+  white-space: nowrap;
+}
+
+/* Specs Card */
+.status-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.status-spec-row {
+  display: flex;
+  gap: 10px;
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+
+.status-spec-key {
+  color: var(--sys-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  min-width: 52px;
+  flex-shrink: 0;
+}
+
+.status-spec-val {
+  color: var(--sys-text);
+  word-break: break-word;
+}
+
+/* KPI Cards */
+.status-kpi-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.status-kpi-value {
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: var(--sys-text);
+  font-family: "JetBrains Mono", monospace;
+}
+
+.status-kpi-unit {
+  font-size: 16px;
+  color: var(--sys-muted);
+  margin-left: 2px;
+  font-weight: 500;
+}
+
+.status-kpi-meta {
+  margin-top: 6px;
+  font-size: 9.5px;
+  color: var(--sys-muted);
+  letter-spacing: 0.02em;
+}
+
+/* CPU Cores */
+.status-cores {
+  display: flex;
+  gap: 5px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.status-core {
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  background: linear-gradient(to top, var(--sys-accent) var(--pct, 0%), rgba(255,255,255,0.06) var(--pct, 0%));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8.5px;
+  font-weight: 600;
+  color: var(--sys-text);
+}
+
+/* Network Card */
+.status-net-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.status-net-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-net-icon {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.status-net-stat--up .status-net-icon {
+  color: var(--sys-accent);
+}
+
+.status-net-stat--down .status-net-icon {
+  color: var(--sys-blue);
+}
+
+.status-net-value {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--sys-text);
+  line-height: 1;
+}
+
+.status-net-label {
+  font-size: 9px;
+  color: var(--sys-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Disk Card */
+.status-disk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.status-disk-label {
+  font-size: 10px;
+  color: var(--sys-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.status-disk-value {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--sys-text);
+  line-height: 1;
+}
+
+/* Sparklines */
+.status-spark {
+  width: 120px;
+  height: 42px;
+  display: block;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 0;
+}
+
+.status-spark--wide {
+  width: 100%;
+  height: 50px;
+}
+
+/* Processes */
+.status-procs {
+  font-size: 11px;
+}
+
+.status-procs-head,
+.status-proc {
+  display: grid;
+  grid-template-columns: 54px 1fr 54px;
+  gap: 10px;
+  align-items: center;
+}
+
+.status-procs-head {
+  color: var(--sys-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 9px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--sys-border);
+  margin-bottom: 6px;
+}
+
+.status-proc {
+  padding: 7px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+  color: var(--sys-text);
+}
+
+.status-proc:last-child {
+  border-bottom: 0;
+}
+
+.status-proc-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.syslink-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
   opacity: 0;
   transform: translateY(12px);
   transition: opacity 280ms ease, transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -2489,59 +2766,65 @@ html[data-theme="light"] .syslink-overlay-stats {
 .syslink-card {
   background: var(--sys-panel);
   border: 1px solid var(--sys-border);
-  border-radius: 12px;
-  padding: 0.75rem 0.875rem;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
   overflow: hidden;
+  font-family: var(--mono-font);
 }
 
 .syslink-card-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 0.5rem;
+  gap: 12px;
+  margin-bottom: 1rem;
 }
 
 .syslink-card-title {
   margin: 0;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--sys-text);
+  font-family: var(--mono-font);
 }
 
 .syslink-card-sub {
-  font-size: 10px;
-  color: var(--sys-muted);
+  font-size: 11px;
+  color: var(--sys-accent);
   white-space: nowrap;
+  font-weight: 500;
 }
 
 /* Specs Card */
 .syslink-specs {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 .syslink-spec-row {
   display: flex;
-  gap: 10px;
-  font-size: 10.5px;
-  line-height: 1.35;
+  gap: 12px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  font-family: var(--mono-font);
 }
 
 .syslink-spec-key {
   color: var(--sys-muted);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  min-width: 52px;
+  letter-spacing: 0.08em;
+  min-width: 54px;
   flex-shrink: 0;
+  font-weight: 500;
 }
 
 .syslink-spec-val {
-  color: var(--sys-text);
+  color: var(--sys-accent);
   word-break: break-word;
+  font-weight: 500;
 }
 
 /* KPI Cards */
@@ -2549,65 +2832,69 @@ html[data-theme="light"] .syslink-overlay-stats {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
+  margin-bottom: 10px;
 }
 
 .syslink-kpi-value {
-  font-size: 36px;
+  font-size: 40px;
   line-height: 1;
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  color: var(--sys-text);
-  font-family: "Source Code Pro", "JetBrains Mono", monospace;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--sys-accent);
+  font-family: var(--mono-font);
 }
 
 .syslink-kpi-unit {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--sys-muted);
-  margin-left: 2px;
+  margin-left: 4px;
   font-weight: 500;
 }
 
 .syslink-kpi-meta {
-  margin-top: 6px;
-  font-size: 9.5px;
+  margin-top: 10px;
+  font-size: 10.5px;
   color: var(--sys-muted);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  font-weight: 500;
 }
 
 /* CPU Cores */
 .syslink-cores {
   display: flex;
-  gap: 5px;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 12px;
   flex-wrap: wrap;
 }
 
 .syslink-core {
-  width: 28px;
-  height: 28px;
-  border-radius: 5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   background: linear-gradient(to top, var(--sys-accent) var(--pct, 0%), rgba(255,255,255,0.06) var(--pct, 0%));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 600;
   color: var(--sys-text);
+  font-family: var(--mono-font);
 }
 
 /* Network Card */
 .syslink-net-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .syslink-net-stat {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  font-family: var(--mono-font);
 }
 
 .syslink-net-icon {
@@ -2624,42 +2911,46 @@ html[data-theme="light"] .syslink-overlay-stats {
 }
 
 .syslink-net-value {
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--sys-text);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sys-accent);
   line-height: 1;
+  font-family: var(--mono-font);
 }
 
 .syslink-net-label {
-  font-size: 9px;
+  font-size: 10px;
   color: var(--sys-muted);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  font-weight: 500;
 }
 
 /* Disk Card */
 .syslink-disk-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .syslink-disk-label {
   font-size: 10px;
   color: var(--sys-muted);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 4px;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  font-weight: 500;
 }
 
 .syslink-disk-value {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--sys-text);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sys-accent);
   line-height: 1;
+  font-family: var(--mono-font);
 }
 
 /* Sparklines */
@@ -2679,31 +2970,33 @@ html[data-theme="light"] .syslink-overlay-stats {
 
 /* Processes */
 .syslink-procs {
-  font-size: 11px;
+  font-size: 12px;
+  font-family: var(--mono-font);
 }
 
 .syslink-procs-head,
 .syslink-proc {
   display: grid;
   grid-template-columns: 54px 1fr 54px;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
 }
 
 .syslink-procs-head {
   color: var(--sys-muted);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 9px;
-  padding-bottom: 8px;
+  font-size: 10px;
+  padding-bottom: 10px;
   border-bottom: 1px solid var(--sys-border);
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  font-weight: 500;
 }
 
 .syslink-proc {
-  padding: 7px 0;
+  padding: 10px 0;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
-  color: var(--sys-text);
+  color: var(--sys-accent);
 }
 
 .syslink-proc:last-child {
@@ -2715,6 +3008,7 @@ html[data-theme="light"] .syslink-overlay-stats {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--sys-text);
 }
 
 .is-right {
@@ -2745,17 +3039,17 @@ html[data-theme="light"] .syslink-overlay-stats {
    LINUX TIMELINE
    ============================================ */
 
-.syslink-timeline {
+.status-timeline {
   margin-top: 3rem;
   padding-top: 2rem;
   border-top: 1px solid var(--sys-border);
 }
 
-.syslink-timeline-header {
+.status-timeline-header {
   margin-bottom: 2rem;
 }
 
-.syslink-timeline-title {
+.status-timeline-title {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
@@ -2764,32 +3058,32 @@ html[data-theme="light"] .syslink-overlay-stats {
   color: var(--sys-text);
 }
 
-.syslink-timeline-sub {
+.status-timeline-sub {
   margin-top: 4px;
   font-size: 11px;
   color: var(--sys-muted);
 }
 
-.syslink-timeline-entries {
+.status-timeline-entries {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.syslink-timeline-entry {
+.status-timeline-entry {
   position: relative;
   padding-left: 1rem;
   border-left: 2px solid var(--sys-border);
 }
 
-.syslink-timeline-date {
+.status-timeline-date {
   font-size: 11px;
   letter-spacing: 0.12em;
   color: var(--sys-muted);
   margin-bottom: 6px;
 }
 
-.syslink-timeline-tag {
+.status-timeline-tag {
   display: inline-block;
   font-size: 10px;
   letter-spacing: 0.12em;
@@ -2801,15 +3095,108 @@ html[data-theme="light"] .syslink-overlay-stats {
   margin-bottom: 12px;
 }
 
-.syslink-timeline-content {
+.status-timeline-content {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   font-size: 0.95rem;
   line-height: 1.75;
   color: var(--sys-muted);
 }
 
-.syslink-timeline-content p {
+.status-timeline-content p {
   margin: 0 0 1rem;
+}
+
+.status-timeline-content p:last-child {
+  margin-bottom: 0;
+}
+
+.status-timeline-end {
+  text-align: center;
+  padding: 2rem 0 0.5rem;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--sys-muted);
+  opacity: 0.6;
+}
+
+/* Noscript */
+.status-noscript {
+  margin-top: 1rem;
+  color: var(--sys-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.syslink-timeline {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--sys-border);
+  font-family: var(--mono-font);
+}
+
+.syslink-timeline-header {
+  margin-bottom: 2rem;
+}
+
+.syslink-timeline-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: var(--sys-text);
+  font-family: var(--mono-font);
+}
+
+.syslink-timeline-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--sys-muted);
+  font-weight: 500;
+}
+
+.syslink-timeline-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.syslink-timeline-entry {
+  position: relative;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--sys-border);
+}
+
+.syslink-timeline-date {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--sys-accent);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.syslink-timeline-tag {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--sys-accent);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.syslink-timeline-content {
+  font-family: var(--mono-font);
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: var(--sys-text);
+}
+
+.syslink-timeline-content p {
+  margin: 0 0 1.2rem;
 }
 
 .syslink-timeline-content p:last-child {
@@ -2818,11 +3205,12 @@ html[data-theme="light"] .syslink-overlay-stats {
 
 .syslink-timeline-end {
   text-align: center;
-  padding: 2rem 0 0.5rem;
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  padding: 2.5rem 0 0.5rem;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   color: var(--sys-muted);
   opacity: 0.6;
+  font-weight: 500;
 }
 
 /* Noscript */

@@ -1,0 +1,257 @@
+---
+layout: layouts/base.njk
+title: Status
+description: Live system telemetry from hewlett.
+permalink: /status/
+layoutClass: is-status-page
+---
+
+<div class="status" id="status" data-ws-url="wss://hewlett.tail16475c.ts.net/">
+  <!-- Live Terminal with scrolling logs -->
+  <div class="status-terminal" id="status-terminal" aria-label="Status terminal">
+    <div class="status-terminal-header">
+      <span class="status-dot red" aria-hidden="true"></span>
+      <span class="status-dot yellow" aria-hidden="true"></span>
+      <span class="status-dot green" aria-hidden="true"></span>
+      <span class="status-terminal-title" id="status-title">hewlett — ssh</span>
+      <div class="status-pill" id="status-status">connecting</div>
+    </div>
+
+    <div class="status-terminal-body">
+      <!-- Scrolling log stream -->
+      <div class="status-logstream" id="status-logstream">
+        <div class="status-logs-inner" id="status-logs-inner">
+          <!-- Boot sequence -->
+          <div class="status-log status-log--boot" id="boot-line-1">
+            <span class="log-prompt">hewlett@hewlett:~$</span>
+            <span class="log-cmd" id="boot-cmd-1"></span>
+            <span class="log-cursor" id="boot-cursor-1">█</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meta bar -->
+  <div class="status-metabar" id="status-metabar">
+    <div class="status-meta-block">
+      <span class="status-meta-label">uptime</span>
+      <span class="status-meta-value" id="sys-meta-uptime">--</span>
+    </div>
+    <div class="status-meta-block">
+      <span class="status-meta-label">born</span>
+      <span class="status-meta-value" id="sys-meta-install">--</span>
+    </div>
+    <div class="status-meta-block">
+      <span class="status-meta-label">temp</span>
+      <span class="status-meta-value" id="sys-meta-temp">--°C</span>
+    </div>
+    <div class="status-meta-block">
+      <span class="status-meta-label">db</span>
+      <span class="status-meta-value" id="sys-meta-db">-- rows</span>
+    </div>
+  </div>
+
+  <!-- Info grid -->
+  <section class="status-grid" id="status-grid">
+    <!-- Specs Card -->
+    <article class="status-card status-card--specs" aria-label="System Specs">
+      <header class="status-card-header">
+        <h2 class="status-card-title">specs</h2>
+        <div class="status-card-sub" id="sys-spec-status">--</div>
+      </header>
+      <div class="status-specs">
+        <div class="status-spec-row">
+          <span class="status-spec-key">os</span>
+          <span class="status-spec-val" id="sys-spec-os">Rocky Linux 10.1 (Red Quartz)</span>
+        </div>
+        <div class="status-spec-row">
+          <span class="status-spec-key">host</span>
+          <span class="status-spec-val" id="sys-spec-host">H81M-S</span>
+        </div>
+        <div class="status-spec-row">
+          <span class="status-spec-key">kernel</span>
+          <span class="status-spec-val" id="sys-spec-kernel">--</span>
+        </div>
+        <div class="status-spec-row">
+          <span class="status-spec-key">cpu</span>
+          <span class="status-spec-val" id="sys-spec-cpu">Intel Core i3-4150 (4) @ 3.50 GHz</span>
+        </div>
+        <div class="status-spec-row">
+          <span class="status-spec-key">ram</span>
+          <span class="status-spec-val" id="sys-spec-ram">-- GiB</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- CPU Card -->
+    <article class="status-card status-card--kpi" aria-label="CPU">
+      <header class="status-card-header">
+        <h2 class="status-card-title">cpu</h2>
+        <div class="status-card-sub">load <span id="sys-load">--</span></div>
+      </header>
+      <div class="status-kpi-row">
+        <div class="status-kpi">
+          <div class="status-kpi-value"><span id="sys-cpu">--</span><span class="status-kpi-unit">%</span></div>
+          <div class="status-kpi-meta">disk <span id="sys-disk-pct">--%</span></div>
+        </div>
+        <canvas class="status-spark" id="spark-cpu" width="240" height="64" aria-hidden="true"></canvas>
+      </div>
+      <div class="status-cores" id="sys-cores"></div>
+    </article>
+
+    <!-- Memory Card -->
+    <article class="status-card status-card--kpi" aria-label="Memory">
+      <header class="status-card-header">
+        <h2 class="status-card-title">memory</h2>
+        <div class="status-card-sub"><span id="sys-ram-used">--</span> / <span id="sys-ram-total">--</span> GiB</div>
+      </header>
+      <div class="status-kpi-row">
+        <div class="status-kpi">
+          <div class="status-kpi-value"><span id="sys-ram">--</span><span class="status-kpi-unit">%</span></div>
+        </div>
+        <canvas class="status-spark" id="spark-ram" width="240" height="64" aria-hidden="true"></canvas>
+      </div>
+    </article>
+
+    <!-- Network Card -->
+    <article class="status-card status-card--net" aria-label="Network">
+      <header class="status-card-header">
+        <h2 class="status-card-title">network i/o</h2>
+        <div class="status-card-sub">KB/s · ratio <span id="sys-net-ratio">--</span></div>
+      </header>
+      <div class="status-net-grid">
+        <div class="status-net-stat status-net-stat--up">
+          <div class="status-net-icon">↑</div>
+          <div class="status-net-value" id="sys-net-up">--</div>
+          <div class="status-net-label">upload</div>
+        </div>
+        <div class="status-net-stat status-net-stat--down">
+          <div class="status-net-icon">↓</div>
+          <div class="status-net-value" id="sys-net-down">--</div>
+          <div class="status-net-label">download</div>
+        </div>
+      </div>
+      <canvas class="status-spark status-spark--wide" id="spark-net" width="520" height="72" aria-hidden="true"></canvas>
+    </article>
+
+    <!-- Disk IO Card -->
+    <article class="status-card status-card--disk" aria-label="Disk IO">
+      <header class="status-card-header">
+        <h2 class="status-card-title">disk i/o</h2>
+        <div class="status-card-sub">KB/s</div>
+      </header>
+      <div class="status-disk-grid">
+        <div class="status-disk-stat">
+          <div class="status-disk-label">read</div>
+          <div class="status-disk-value" id="sys-disk-read">--</div>
+        </div>
+        <div class="status-disk-stat">
+          <div class="status-disk-label">write</div>
+          <div class="status-disk-value" id="sys-disk-write">--</div>
+        </div>
+      </div>
+      <canvas class="status-spark status-spark--wide" id="spark-disk" width="520" height="56" aria-hidden="true"></canvas>
+    </article>
+
+    <!-- Top Processes -->
+    <article class="status-card status-card--procs" aria-label="Top processes">
+      <header class="status-card-header">
+        <h2 class="status-card-title">top</h2>
+        <div class="status-card-sub">by memory</div>
+      </header>
+      <div class="status-procs" role="table" aria-label="Top 5 processes">
+        <div class="status-procs-head" role="row">
+          <div role="columnheader">pid</div>
+          <div role="columnheader">name</div>
+          <div role="columnheader" class="is-right">mem%</div>
+        </div>
+        <div class="status-procs-body" id="sys-procs" role="rowgroup"></div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Linux Timeline Section -->
+  <section class="status-timeline" id="status-timeline">
+    <header class="status-timeline-header">
+      <h2 class="status-timeline-title">my linux timeline</h2>
+      <div class="status-timeline-sub">// MY.log</div>
+    </header>
+
+    <div class="status-timeline-entries">
+      <article class="status-timeline-entry">
+        <div class="status-timeline-date">[2020.03] COVID_ERA</div>
+        <div class="status-timeline-tag">ORIGIN</div>
+        <div class="status-timeline-content">
+          <p>my experience with linux began during the COVID era. and at that time i did not even own a PC.</p>
+          <p>i first came to know about linux from a video that got recommended to me on youtube. it was from NetworkChuck. his video about kali linux got my attention and it developed over time as i started watching more content about it. with that curiosity i wanted to try using linux, but the only way i could get close to it was through my phone.</p>
+          <p>i emulated kali linux on my samsung j2 with 4 gigs of ram i guess, just to see if was possible. it technically did work, but i had no idea what i was doing. i didnt understand the interface, the tools it had, the terminal. but still it it was good and infact my interest has gone up even higher</p>
+        </div>
+      </article>
+
+      <article class="status-timeline-entry">
+        <div class="status-timeline-date">[2021.XX] HARDWARE_UPGRADE</div>
+        <div class="status-timeline-tag">FIRST_PC</div>
+        <div class="status-timeline-content">
+          <p>a few years later after convincing my dad i finally got access to a desktop PC. it had an i3 4th gen processor with 8 gigs of ram. i felt like i had a supercomputer. i didnt sleep that night.</p>
+          <p>it shipped with windows 10. and initially for a year i stuck with it. until i got linux on my screen again.</p>
+        </div>
+      </article>
+
+      <article class="status-timeline-entry">
+        <div class="status-timeline-date">[2022.XX] FIRST_BOOT</div>
+        <div class="status-timeline-tag">UBUNTU</div>
+        <div class="status-timeline-content">
+          <p>i installed ubuntu, and in the process i learned how operating systems work, what ISOs are, what's a boot menu and a bunch of more nerdy stuff.</p>
+          <p>right from the first boot, linux felt very different. everything felt very fast, apps loaded faster, and strangely i remember the screen felt fast. in windows, i felt like refresh rate was like 30/45hz even though the screen was 60hz, moving the cursor felt laggy, but in the linux it felt super smooth.</p>
+        </div>
+      </article>
+
+      <article class="status-timeline-entry">
+        <div class="status-timeline-date">[2022.XX - 2023.XX] DISTRO_HOP_PHASE</div>
+        <div class="status-timeline-tag">LEARNING</div>
+        <div class="status-timeline-content">
+          <p>from there i began distro hopping. i moved between ubuntu, fedora, arch based distributions. some worked smoothly, and most of the others were broke in many ways like audio issues, driver problems, and missing dependencies.</p>
+          <p>this phase of my life taught me how to troubleshoot things about package managers, desktop environments, file systems and how much control an OS can give the user.</p>
+        </div>
+      </article>
+
+      <article class="status-timeline-entry">
+        <div class="status-timeline-date">[2023.XX] PORTABLE_COMPUTE</div>
+        <div class="status-timeline-tag">LAPTOP</div>
+        <div class="status-timeline-content">
+          <p>eventually i got a laptop which made my geek mind easier to try more things. i dual booted linux with windows and experimented with setups to balance practicality and a hobby i guess.</p>
+        </div>
+      </article>
+
+      <article class="status-timeline-entry">
+        <div class="status-timeline-date">[PHILOSOPHY] KERNEL_THOUGHTS</div>
+        <div class="status-timeline-tag">REFLECTION</div>
+        <div class="status-timeline-content">
+          <p>i believe that linux never was and i guess it never will be convinient to the most users as long as this capitalistic world exists.</p>
+          <p>many everyday tools are not available and even if they are available, they are not stable.</p>
+        </div>
+      </article>
+
+      <article class="status-timeline-entry">
+        <div class="status-timeline-date">[2024.XX - PRESENT] HEADLESS_MODE</div>
+        <div class="status-timeline-tag">HOMELAB</div>
+        <div class="status-timeline-content">
+          <p>the next shift came when i discovered 'home lab' content. this is when i stopped thinking about linux as just a desktop operating system.</p>
+          <p>i set up a home server and learned to work headless. i become comfortable with bash commands and SSH, managing storage, local networking, hosting minecraft servers. i experimented with TrueNas, Proxmox, hosted Nextcloud, Jellyfin and many things.</p>
+        </div>
+      </article>
+
+      <div class="status-timeline-end">
+        <span>--- END_OF_LOG ---</span>
+      </div>
+    </div>
+  </section>
+
+  <noscript>
+    <p class="status-noscript">Enable JavaScript to view realtime telemetry.</p>
+  </noscript>
+</div>
+
+<script src="/assets/status.js" defer></script>
+

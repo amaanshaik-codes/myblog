@@ -1,5 +1,5 @@
 (function () {
-  // Load Geist fonts from local assets if present and add .fonts-loaded class when ready
+  // Load Libertinus and JetBrains Mono fonts from Google Fonts
   if (!('fonts' in document)) {
     // Older browsers: still safe to use CSS font-face with swap
     return;
@@ -13,10 +13,13 @@
     }
   }
 
-  Promise.all([loadFont('Geist Sans', 400), loadFont('Geist Mono', 400)]).then(function () {
+  Promise.all([
+    loadFont('Libertinus Serif', '400'),
+    loadFont('JetBrains Mono', '400')
+  ]).then(function () {
     document.documentElement.classList.add('fonts-loaded');
-    console.info('Geist fonts loaded');
+    console.info('Custom fonts loaded');
   }).catch(function () {
-    console.info('Geist fonts did not finish loading');
+    console.info('Custom fonts did not finish loading');
   });
 })();

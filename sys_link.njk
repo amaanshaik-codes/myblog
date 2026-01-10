@@ -7,30 +7,10 @@ layoutClass: is-syslink-page
 ---
 
 <div class="syslink syslink-v2" id="syslink" data-ws-url="wss://hewlett.tail16475c.ts.net/">
-  <!-- Live Terminal with scrolling logs -->
-  <div class="sys-terminal syslink-terminal" id="syslink-terminal" aria-label="SYS_LINK terminal">
-    <div class="sys-terminal-header">
-      <span class="sys-dot red" aria-hidden="true"></span>
-      <span class="sys-dot yellow" aria-hidden="true"></span>
-      <span class="sys-dot green" aria-hidden="true"></span>
-      <span class="sys-terminal-title" id="syslink-title">hewlett — ssh</span>
-      <div class="syslink-status-pill" id="syslink-status">connecting</div>
-    </div>
-
-    <div class="sys-terminal-body syslink-terminal-body">
-      <!-- Scrolling log stream -->
-      <div class="syslink-logstream" id="syslink-logstream">
-        <div class="syslink-logs-inner" id="syslink-logs-inner">
-          <!-- Boot sequence -->
-          <div class="syslink-log syslink-log--boot" id="boot-line-1">
-            <span class="log-prompt">hewlett@hewlett:~$</span>
-            <span class="log-cmd" id="boot-cmd-1"></span>
-            <span class="log-cursor" id="boot-cursor-1">█</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Header -->
+  <header class="syslink-page-header">
+    <h1 class="syslink-page-title">home server status</h1>
+  </header>
 
   <!-- Meta bar -->
   <div class="syslink-metabar" id="syslink-metabar">
@@ -53,7 +33,7 @@ layoutClass: is-syslink-page
   </div>
 
   <!-- Bento grid -->
-  <section class="syslink-grid" id="syslink-grid">
+  <section class="syslink-grid" id="syslink-grid" hidden>
     <!-- Specs Card -->
     <article class="syslink-card syslink-card--specs" aria-label="System Specs">
       <header class="syslink-card-header">
@@ -217,37 +197,6 @@ layoutClass: is-syslink-page
       </article>
 
       <article class="syslink-timeline-entry">
-        <div class="syslink-timeline-date">[2023.XX] PORTABLE_COMPUTE</div>
-        <div class="syslink-timeline-tag">LAPTOP</div>
-        <div class="syslink-timeline-content">
-          <p>eventually i got a laptop which made my geek mind easier to try more things. i dual booted linux with windows and experimented with setups to balance practicality and a hobby i guess.</p>
-        </div>
-      </article>
-
-      <article class="syslink-timeline-entry">
-        <div class="syslink-timeline-date">[PHILOSOPHY] KERNEL_THOUGHTS</div>
-        <div class="syslink-timeline-tag">REFLECTION</div>
-        <div class="syslink-timeline-content">
-          <p>i believe that linux never was and i guess it never will be convinient to the most users as long as this capitalistic world exists.</p>
-          <p>many everyday tools are not available and even if they are available, they are not stable.</p>
-        </div>
-      </article>
-
-      <article class="syslink-timeline-entry">
-        <div class="syslink-timeline-date">[2024.XX - PRESENT] HEADLESS_MODE</div>
-        <div class="syslink-timeline-tag">HOMELAB</div>
-        <div class="syslink-timeline-content">
-          <p>the next shift came when i discovered 'home lab' content. this is when i stopped thinking about linux as just a desktop operating system.</p>
-          <p>i set up a home server and learned to work headless. i become comfortable with bash commands and SSH, managing storage, local networking, hosting minecraft servers. i experimented with TrueNas, Proxmox, hosted Nextcloud, Jellyfin and many things.</p>
-        </div>
-      </article>
-
-      <div class="syslink-timeline-end">
-        <span>--- END_OF_LOG ---</span>
-      </div>
-    </div>
-  </section>
-
   <noscript>
     <p class="syslink-noscript">Enable JavaScript to view realtime telemetry.</p>
   </noscript>

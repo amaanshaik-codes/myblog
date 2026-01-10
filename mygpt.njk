@@ -10,57 +10,75 @@ layoutClass: is-mygpt-page
 <div class="mygpt-modal-overlay" id="mygpt-modal-overlay"></div>
 <div class="mygpt-modal" id="mygpt-modal">
   <div class="mygpt-modal-content">
-    <button type="button" class="mygpt-modal-close" id="mygpt-modal-close" aria-label="Close modal">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
-    <h2 class="mygpt-modal-title">About this model</h2>
+    <h2 class="mygpt-modal-title">welcome to hermes3:3b</h2>
     <div class="mygpt-modal-body">
-      <p><strong>Model:</strong> Customized version of Qwen3:1.7B</p>
-      <p><strong>Important:</strong> This model can sometimes hallucinate and provide inaccurate information. Please verify important information from reliable sources.</p>
+      <p>You're chatting with <a href="https://huggingface.co/NousResearch/Hermes-3-Llama-3.2-3B" target="_blank" rel="noopener">Hermes 3</a>, a 3B parameter model by NousResearch, running on my home server via Ollama.</p>
+      <div class="mygpt-modal-features">
+        <div class="mygpt-modal-feature">
+          <svg class="mygpt-modal-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Self-hosted on my own hardware</span>
+        </div>
+        <div class="mygpt-modal-feature">
+          <svg class="mygpt-modal-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>No data collection, ever</span>
+        </div>
+        <div class="mygpt-modal-feature">
+          <svg class="mygpt-modal-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"></circle>
+            <path d="M12 1v6"></path>
+            <path d="M4.22 4.22l4.24 4.24"></path>
+            <path d="M1 12h6"></path>
+            <path d="M4.22 19.78l4.24-4.24"></path>
+            <path d="M12 23v-6"></path>
+            <path d="M19.78 19.78l-4.24-4.24"></path>
+            <path d="M23 12h-6"></path>
+            <path d="M19.78 4.22l-4.24 4.24"></path>
+          </svg>
+          <span>I can hear the fans spinning if you stress it</span>
+        </div>
+      </div>
     </div>
-    <button type="button" class="mygpt-modal-action" id="mygpt-modal-dismiss">Got it</button>
+    <button type="button" class="mygpt-modal-action" id="mygpt-modal-dismiss">got it</button>
   </div>
 </div>
 
 <div class="mygpt-container">
-  <!-- Top spacer to respect safe-area & keep back button clear -->
-  <div class="mygpt-top-spacer" aria-hidden="true"></div>
-
   <!-- Chat Messages -->
   <div class="mygpt-messages" id="mygpt-messages">
     <div class="mygpt-welcome">
-      <h1 class="mygpt-welcome-brand">mygpt</h1>
-      <p class="mygpt-welcome-description">a self-hosted large language model running on my home server. powered by ollama.</p>
+      <span class="mygpt-welcome-icon">✦</span>
+      <p class="mygpt-welcome-text">ask me anything</p>
+      <button type="button" class="mygpt-info-link" id="mygpt-info-btn" aria-label="About this model">about this model →</button>
     </div>
+  </div>
+
+  <!-- Warning -->
+  <div class="mygpt-disclaimer">
+    small model · may provide inaccurate information
   </div>
 
   <!-- Chat Input -->
   <div class="mygpt-input-wrapper">
     <form class="mygpt-input-form" id="mygpt-form">
-      <div class="mygpt-input-controls">
-        <button type="button" class="mygpt-clear" id="mygpt-clear" aria-label="Clear conversation" title="Clear">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 6h18"></path>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            <line x1="10" y1="11" x2="10" y2="17"></line>
-            <line x1="14" y1="11" x2="14" y2="17"></line>
-          </svg>
-        </button>
-        <textarea 
-          class="mygpt-input" 
-          id="mygpt-input" 
-          placeholder="message..."
-          rows="1"
-          autocomplete="off"
-          required
-        ></textarea>
-        <button type="submit" class="mygpt-send" id="mygpt-send" aria-label="Send message">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 2L11 13"/>
-            <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
+      <textarea 
+        class="mygpt-input" 
+        id="mygpt-input" 
+        placeholder="message"
+        rows="1"
+        autocomplete="off"
+        required
+      ></textarea>
+      <div class="mygpt-input-actions">
+        <button type="submit" class="mygpt-send" id="mygpt-send" aria-label="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
           </svg>
         </button>
       </div>
