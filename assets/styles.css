@@ -1453,6 +1453,8 @@ footer.site-footer {
   position: relative;
   text-align: center;
   max-width: 380px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mygpt-modal-close {
@@ -1527,14 +1529,21 @@ footer.site-footer {
   gap: 0.75rem;
   font-size: 0.875rem;
   color: var(--fg);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mygpt-modal-feature-icon {
   width: 20px;
   height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 20px;
+  max-height: 20px;
   flex-shrink: 0;
   color: var(--muted);
   stroke: currentColor;
+  display: block;
 }
 
 .mygpt-modal-action {
@@ -1831,6 +1840,15 @@ footer.site-footer {
   
   .mygpt-modal-feature {
     font-size: 0.8125rem;
+  }
+  
+  .mygpt-modal-feature-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
   }
   
   /* Smaller buttons on mobile */

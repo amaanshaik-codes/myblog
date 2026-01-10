@@ -4,6 +4,9 @@
   const API_BASE = 'https://hewlett.tail16475c.ts.net';
   const API_ENDPOINT = `${API_BASE}/api/generate`;
   const MODEL_NAME = 'hermes3:3b';
+  const SYSTEM_PROMPT = `You are Hermes, the assistant running on Amaan's home server. Speak like a normal person — not robotic or vague. Do not use phrases such as "As an AI", "I cannot", "I don’t have the context", or similar disclaimers. Avoid apologies that signal lack of ability. Be concise and direct: use short sentences for simple questions and only write long paragraphs when the topic requires detail.
+
+Tone: slightly quirky but restrained — not overly friendly. No emojis, no slang that breaks clarity. Prefer plain, clear language that sounds like a person talking. If you must refuse (safety/legal/medical), do so briefly and give a short, practical explanation or safe alternative.`;
 
   const elements = {
     messages: document.getElementById('mygpt-messages'),
@@ -308,6 +311,12 @@
     }, 5000);
 
     try {
+      // Build messages array with system prompt
+      const messages = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...conversationMessages
+      ];
+
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         mode: 'cors',
@@ -317,7 +326,11 @@
         },
         body: JSON.stringify({
           model: MODEL_NAME,
-          prompt: message,
+          prompt: messages.map(m => {
+            if (m.role === 'system') return `System: ${m.content}`;
+            if (m.role === 'user') return `User: ${m.content}`;
+            return `Assistant: ${m.content}`;
+          }).join('\n\n') + '\n\nAssistant:',
           stream: true
         })
       });
@@ -444,7 +457,10 @@
   elements.input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      elements.form.dispatchEvent(new Event('submit'));
+      const message = elements.input.value.trim();
+      if (message) {
+        sendMessage(message);
+      }
     }
   });
 
