@@ -1230,21 +1230,37 @@ footer.site-footer {
 }
 
 /* Show and style theme toggle on mygpt page for quick access */
+.is-mygpt-page .back-button {
+  display: inline-flex !important;
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top, 0px) + 0.5rem);
+  left: max(1rem, env(safe-area-inset-left, 0px) + 0.5rem);
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  color: var(--muted);
+  z-index: 1002;
+}
+
+.is-mygpt-page .back-button:hover {
+  color: var(--fg);
+  transform: none;
+  opacity: 1;
+}
+
 .is-mygpt-page .theme-toggle {
   display: inline-flex !important;
   position: fixed;
   top: max(1rem, env(safe-area-inset-top, 0px) + 0.5rem);
   right: max(1rem, env(safe-area-inset-right, 0px) + 0.5rem);
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: transparent;
+  border: none;
   padding: 0.5rem;
   color: var(--muted);
   z-index: 1002;
 }
 
 .is-mygpt-page .theme-toggle:hover {
-  background: var(--code-bg);
   color: var(--fg);
 }
 
@@ -1333,12 +1349,6 @@ footer.site-footer {
   to { opacity: 1; }
 }
 
-.mygpt-welcome-icon {
-  font-size: 1.5rem;
-  color: var(--muted);
-  margin-bottom: 0.5rem;
-}
-
 .mygpt-welcome-text {
   font-size: 1.125rem;
   color: var(--muted);
@@ -1346,6 +1356,39 @@ footer.site-footer {
   font-weight: 400;
   margin: 0;
   letter-spacing: -0.01em;
+}
+
+.mygpt-prompt-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+.mygpt-prompt-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: var(--muted);
+  font-family: var(--body-font);
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+}
+
+.mygpt-prompt-btn:hover {
+  background: var(--code-bg);
+  color: var(--fg);
+  border-color: var(--fg);
+}
+
+.mygpt-prompt-btn:active {
+  transform: scale(0.98);
 }
 
 .mygpt-info-link {
@@ -2185,6 +2228,68 @@ body.keyboard-open .mygpt-messages {
 
 /* Live mode indicator */
 .status--live {
+}
+
+/* Loading indicator */
+.status-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sys-panel);
+  border-radius: 0;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 300ms ease;
+  z-index: 10;
+}
+
+.status-loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.status-loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--sys-border);
+  border-top-color: var(--sys-accent);
+  border-radius: 50%;
+  animation: spinnerRotate 0.8s linear infinite;
+}
+
+@keyframes spinnerRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-loading-text {
+  font-size: 12px;
+  color: var(--sys-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  animation: pulseOpacity 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseOpacity {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .status-metabar {

@@ -39,7 +39,7 @@
       modal.classList.add('mygpt-modal-active');
       overlay.setAttribute('aria-hidden', 'false');
       modal.setAttribute('aria-hidden', 'false');
-    closeBtn.focus();
+      dismissBtn.focus();
     }
     
     function closeModal() {
@@ -509,6 +509,19 @@
   initializeModal();
   checkAPI();
   setupMobileKeyboardHandling();
+
+  // Handle prompt suggestion buttons
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('mygpt-prompt-btn')) {
+      const prompt = e.target.getAttribute('data-prompt');
+      if (prompt) {
+        elements.input.value = prompt;
+        autoResize(elements.input);
+        // Directly send the message
+        sendMessage(prompt);
+      }
+    }
+  });
 
   // Periodic health check
   setInterval(checkAPI, 30000); // Check every 30 seconds

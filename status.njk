@@ -18,6 +18,14 @@ layoutClass: is-status-page
     </div>
 
     <div class="status-terminal-body">
+      <!-- Loading indicator -->
+      <div class="status-loading" id="status-loading" aria-label="Connecting to server">
+        <div class="status-loading-spinner">
+          <div class="status-spinner"></div>
+          <div class="status-loading-text">connecting to hewlett...</div>
+        </div>
+      </div>
+      
       <!-- Scrolling log stream -->
       <div class="status-logstream" id="status-logstream">
         <div class="status-logs-inner" id="status-logs-inner">

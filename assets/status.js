@@ -7,6 +7,7 @@
   // Element cache
   const $ = (id) => document.getElementById(id);
   const els = {
+    loading: $('status-loading'),
     logstream: $('status-logstream'),
     logsInner: $('status-logs-inner'),
     status: $('status-status'),
@@ -360,6 +361,8 @@
   function enterLiveMode() {
     if (firstPacket) return;
     firstPacket = true;
+    // Hide loading indicator
+    if (els.loading) els.loading.classList.add('hidden');
     root.classList.add('status--live');
     if (els.grid) els.grid.removeAttribute('hidden');
     if (els.metabar) els.metabar.classList.add('is-visible');

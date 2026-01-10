@@ -1,6 +1,6 @@
 ---
 layout: layouts/base.njk
-title: MyGPT
+title: Hermes
 description: Chat with my self-hosted LLM.
 permalink: /mygpt/
 layoutClass: is-mygpt-page
@@ -52,8 +52,12 @@ layoutClass: is-mygpt-page
   <!-- Chat Messages -->
   <div class="mygpt-messages" id="mygpt-messages">
     <div class="mygpt-welcome">
-      <span class="mygpt-welcome-icon">✦</span>
-      <p class="mygpt-welcome-text">ask me anything</p>
+      <p class="mygpt-welcome-text">ask hermes anything</p>
+      <div class="mygpt-prompt-suggestions">
+        <button type="button" class="mygpt-prompt-btn" data-prompt="explain coffee to someone who never slept">explain coffee to someone who never slept</button>
+        <button type="button" class="mygpt-prompt-btn" data-prompt="explain cryptocurrency to my grandma">explain cryptocurrency to my grandma</button>
+        <button type="button" class="mygpt-prompt-btn" data-prompt="what is the capital of paris?">what is the capital of paris?</button>
+      </div>
       <button type="button" class="mygpt-info-link" id="mygpt-info-btn" aria-label="About this model">about this model →</button>
     </div>
   </div>
@@ -86,4 +90,4 @@ layoutClass: is-mygpt-page
   </div>
 </div>
 
-<script src="/assets/mygpt.js" defer></script>
+<script src="/assets/mygpt.js?v={{ site.assetVersion }}" defer></script>

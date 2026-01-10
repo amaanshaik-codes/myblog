@@ -3,4 +3,5 @@ module.exports = {
   url: "https://amaanshaik.me/",
   description: "this is the space where i document everything i learn. kinda like a jounral.",
   author: "Amaan Shaik",
+  assetVersion: "20260110",
 };
