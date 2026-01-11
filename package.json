@@ -8,7 +8,8 @@
     "build": "eleventy",
     "generate:favicons": "node scripts/generate-favicons.js",
     "install-geist-fonts": "node scripts/install-geist-fonts.js",
-    "postinstall": "npm run install-geist-fonts || true && npm run generate:favicons || true"
+    "images:build": "node scripts/resize-avatar.js",
+    "postinstall": "npm run install-geist-fonts || true && npm run generate:favicons || true && npm run images:build || true"
   },
   "engines": {
     "node": ">=18"
