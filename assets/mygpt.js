@@ -9,12 +9,12 @@
 Tone: slightly quirky but restrained — not overly friendly. No emojis, no slang that breaks clarity. Prefer plain, clear language that sounds like a person talking. If you must refuse (safety/legal/medical), do so briefly and give a short, practical explanation or safe alternative.`;
 
   const elements = {
-    messages: document.getElementById('mygpt-messages'),
-    form: document.getElementById('mygpt-form'),
-    input: document.getElementById('mygpt-input'),
-    send: document.getElementById('mygpt-send'),
-    status: document.getElementById('mygpt-status'),
-  };
+    messages: document.getElementById('hermes-messages'),
+    form: document.getElementById('hermes-form'),
+    input: document.getElementById('hermes-input'),
+    send: document.getElementById('hermes-send'),
+    status: document.getElementById('hermes-status'),
+  }; 
 
   let isGenerating = false;
   let currentChunkTimeout = null;
@@ -22,10 +22,10 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
 
   // Modal management
   function initializeModal() {
-    const modal = document.getElementById('mygpt-modal');
-    const overlay = document.getElementById('mygpt-modal-overlay');
-    const dismissBtn = document.getElementById('mygpt-modal-dismiss');
-    const infoBtn = document.getElementById('mygpt-info-btn');
+    const modal = document.getElementById('hermes-modal');
+    const overlay = document.getElementById('hermes-modal-overlay');
+    const dismissBtn = document.getElementById('hermes-modal-dismiss');
+    const infoBtn = document.getElementById('hermes-info-btn');
     let lastFocusedElement = null;
     
     // Gracefully handle if modal elements don't exist
@@ -38,16 +38,16 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
     
     function openModal() {
       lastFocusedElement = document.activeElement;
-      overlay.classList.add('mygpt-modal-active');
-      modal.classList.add('mygpt-modal-active');
+      overlay.classList.add('hermes-modal-active');
+      modal.classList.add('hermes-modal-active');
       overlay.setAttribute('aria-hidden', 'false');
       modal.setAttribute('aria-hidden', 'false');
       dismissBtn.focus();
     }
     
     function closeModal() {
-      overlay.classList.remove('mygpt-modal-active');
-      modal.classList.remove('mygpt-modal-active');
+      overlay.classList.remove('hermes-modal-active');
+      modal.classList.remove('hermes-modal-active');
       overlay.setAttribute('aria-hidden', 'true');
       modal.setAttribute('aria-hidden', 'true');
       if (lastFocusedElement && lastFocusedElement !== document.body) {
@@ -57,14 +57,14 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
     
     // ESC key handler
     function handleEscape(e) {
-      if (e.key === 'Escape' && modal.classList.contains('mygpt-modal-active')) {
+      if (e.key === 'Escape' && modal.classList.contains('hermes-modal-active')) {
         closeModal();
       }
     }
     
     // Focus trap
     function trapFocus(e) {
-      if (!modal.classList.contains('mygpt-modal-active')) return;
+      if (!modal.classList.contains('hermes-modal-active')) return;
       
       const focusableElements = modal.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -98,7 +98,7 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
   function setStatus(status) {
     if (!elements.status) return; // Status UI removed, skip updates
     
-    const statusText = elements.status.querySelector('.mygpt-status-text');
+    const statusText = elements.status.querySelector('.hermes-status-text');
     if (!statusText) return;
     
     elements.status.setAttribute('data-status', status);
@@ -164,31 +164,31 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
   // Create message element (minimal Grok-style - no cards, no avatars)
   function createMessage(content, role = 'user') {
     const messageDiv = document.createElement('div');
-    messageDiv.className = `mygpt-message mygpt-message--${role}`;
+    messageDiv.className = `hermes-message hermes-message--${role}`;
     
     if (role === 'assistant') {
       const textSpan = document.createElement('span');
-      textSpan.className = 'mygpt-message-text';
+      textSpan.className = 'hermes-message-text';
       textSpan.textContent = content;
       messageDiv.appendChild(textSpan);
       
       // Add message actions container
       const actionsDiv = document.createElement('div');
-      actionsDiv.className = 'mygpt-message-actions';
+      actionsDiv.className = 'hermes-message-actions';
       
       // Add copy button
       const copyBtn = document.createElement('button');
       copyBtn.type = 'button';
-      copyBtn.className = 'mygpt-message-copy';
+      copyBtn.className = 'hermes-message-copy';
       copyBtn.title = 'Copy message';
       copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>';
       
       copyBtn.addEventListener('click', async () => {
         try {
           await navigator.clipboard.writeText(content);
-          copyBtn.classList.add('mygpt-message-copy--copied');
+          copyBtn.classList.add('hermes-message-copy--copied');
           setTimeout(() => {
-            copyBtn.classList.remove('mygpt-message-copy--copied');
+            copyBtn.classList.remove('hermes-message-copy--copied');
           }, 2000);
         } catch (error) {
           console.error('Failed to copy:', error);
@@ -200,7 +200,7 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
     } else {
       // User message - styled as a pill/bubble
       const userBubble = document.createElement('div');
-      userBubble.className = 'mygpt-user-bubble';
+      userBubble.className = 'hermes-user-bubble';
       userBubble.textContent = content;
       messageDiv.appendChild(userBubble);
     }
@@ -221,9 +221,9 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
     
     if (tokenText) {
       const tokenBadge = document.createElement('div');
-      tokenBadge.className = 'mygpt-message-tokens';
+      tokenBadge.className = 'hermes-message-tokens';
       tokenBadge.textContent = tokenText;
-      const actionsDiv = messageEl.querySelector('.mygpt-message-actions');
+      const actionsDiv = messageEl.querySelector('.hermes-message-actions');
       if (actionsDiv) {
         actionsDiv.appendChild(tokenBadge);
       }
@@ -233,11 +233,11 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
   // Create loading indicator with "thinking" text
   function createLoadingIndicator() {
     const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'mygpt-message mygpt-message--assistant mygpt-message--loading';
+    loadingDiv.className = 'hermes-message hermes-message--assistant hermes-message--loading';
     loadingDiv.id = 'loading-indicator';
     
     const thinkingSpan = document.createElement('span');
-    thinkingSpan.className = 'mygpt-thinking';
+    thinkingSpan.className = 'hermes-thinking';
     thinkingSpan.textContent = 'thinking';
     
     loadingDiv.appendChild(thinkingSpan);
@@ -270,7 +270,7 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
     if (!message.trim() || isGenerating) return;
 
     // Hide welcome message if it exists
-    const welcomeMsg = elements.messages.querySelector('.mygpt-welcome');
+    const welcomeMsg = elements.messages.querySelector('.hermes-welcome');
     if (welcomeMsg) {
       welcomeMsg.style.display = 'none';
     }
@@ -301,7 +301,7 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
     const longGenerationTimeout = setTimeout(() => {
       if (isGenerating && loadingIndicator.parentNode) {
         // Replace or update the loading indicator
-        const thinkingSpan = loadingIndicator.querySelector('.mygpt-thinking');
+        const thinkingSpan = loadingIndicator.querySelector('.hermes-thinking');
         if (thinkingSpan) {
           thinkingSpan.innerHTML = `thinking<br><span style="font-size: 0.75rem; margin-top: 0.5rem; display: block; opacity: 0.7;">hold on... this model takes a moment to think deeply. it's processing your question carefully.</span>`;
           scrollToBottom();
@@ -347,7 +347,7 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
       // Create assistant message
       const assistantMessage = createMessage('', 'assistant');
       elements.messages.appendChild(assistantMessage);
-      const textSpan = assistantMessage.querySelector('.mygpt-message-text');
+      const textSpan = assistantMessage.querySelector('.hermes-message-text');
 
       // Read stream with smooth text reveal
       const reader = response.body.getReader();
@@ -426,7 +426,7 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
 
       // Show error message
       const errorMessage = createMessage(errorText, 'assistant');
-      errorMessage.classList.add('mygpt-message--error');
+      errorMessage.classList.add('hermes-message--error');
       elements.messages.appendChild(errorMessage);
       
       setStatus('offline');
@@ -466,8 +466,8 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
 
   // Mobile keyboard handling - prevent viewport shift
   function setupMobileKeyboardHandling() {
-    const container = document.querySelector('.mygpt-container');
-    const inputWrapper = document.querySelector('.mygpt-input-wrapper');
+    const container = document.querySelector('.hermes-container');
+    const inputWrapper = document.querySelector('.hermes-input-wrapper');
     
     if (!container || !inputWrapper) return;
     
@@ -528,7 +528,7 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
 
   // Handle prompt suggestion buttons
   document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('mygpt-prompt-btn')) {
+    if (e.target.classList.contains('hermes-prompt-btn')) {
       const prompt = e.target.getAttribute('data-prompt');
       if (prompt) {
         elements.input.value = prompt;

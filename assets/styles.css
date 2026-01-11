@@ -1220,7 +1220,7 @@ footer.site-footer {
 }
 
 /* ============================================
-   MYGPT CHAT PAGE
+   HERMES CHAT PAGE
    ============================================ */
 
 .is-hermes-page .stamp-header,
@@ -1230,8 +1230,8 @@ footer.site-footer {
   display: none !important;
 }
 
-/* Show and style theme toggle on mygpt page for quick access */
-.is-mygpt-page .back-button {
+/* Show and style theme toggle on hermes page for quick access */
+.is-hermes-page .back-button {
   display: inline-flex !important;
   position: fixed;
   top: max(1rem, env(safe-area-inset-top, 0px) + 0.5rem);
@@ -1243,13 +1243,13 @@ footer.site-footer {
   z-index: 1002;
 }
 
-.is-mygpt-page .back-button:hover {
+.is-hermes-page .back-button:hover {
   color: var(--fg);
   transform: none;
   opacity: 1;
 }
 
-.is-mygpt-page .theme-toggle {
+.is-hermes-page .theme-toggle {
   display: inline-flex !important;
   position: fixed;
   top: max(1rem, env(safe-area-inset-top, 0px) + 0.5rem);
@@ -1261,7 +1261,7 @@ footer.site-footer {
   z-index: 1002;
 }
 
-.is-mygpt-page .theme-toggle:hover {
+.is-hermes-page .theme-toggle:hover {
   color: var(--fg);
 }
 
@@ -1273,16 +1273,16 @@ footer.site-footer {
 .is-syslink-page .stamp-avatar,
 .is-syslink-page .stamp-ring {
   display: none !important;
-}.is-mygpt-page .theme-toggle:focus-visible {
+}.is-hermes-page .theme-toggle:focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 2px;
 }
 
-.is-mygpt-page body {
+.is-hermes-page body {
   overflow: hidden;
 }
 
-.is-mygpt-page main {
+.is-hermes-page main {
   padding: 0;
   max-width: 100%;
   margin: 0;
@@ -1322,18 +1322,18 @@ footer.site-footer {
   -webkit-overflow-scrolling: touch;
 }
 
-.mygpt-messages::-webkit-scrollbar {
+.hermes-messages::-webkit-scrollbar {
   width: 0;
   display: none;
 }
 
-/* Hide header on mygpt page */
-.is-mygpt-page .mygpt-header {
+/* Hide header on hermes page */
+.is-hermes-page .hermes-header {
   display: none !important;
 }
 
 /* Welcome screen - centered, minimal */
-.mygpt-welcome {
+.hermes-welcome {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1350,7 +1350,7 @@ footer.site-footer {
   to { opacity: 1; }
 }
 
-.mygpt-welcome-text {
+.hermes-welcome-text {
   font-size: 1.125rem;
   color: var(--muted);
   font-family: var(--body-font);
@@ -1359,7 +1359,7 @@ footer.site-footer {
   letter-spacing: -0.01em;
 }
 
-.mygpt-prompt-suggestions {
+.hermes-prompt-suggestions {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -1368,7 +1368,7 @@ footer.site-footer {
   max-width: 420px;
 }
 
-.mygpt-prompt-btn {
+.hermes-prompt-btn {
   background: transparent;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -1382,13 +1382,13 @@ footer.site-footer {
   line-height: 1.4;
 }
 
-.mygpt-prompt-btn:hover {
+.hermes-prompt-btn:hover {
   background: var(--code-bg);
   color: var(--fg);
   border-color: var(--fg);
 }
 
-.mygpt-prompt-btn:active {
+.hermes-prompt-btn:active {
   transform: scale(0.98);
 }
 
@@ -1475,18 +1475,18 @@ footer.site-footer {
   transition: all 0.15s;
 }
 
-.mygpt-modal-close:hover {
+.hermes-modal-close:hover {
   background: var(--code-bg);
   color: var(--fg);
 }
 
-.mygpt-modal-icon {
+.hermes-modal-icon {
   font-size: 2rem;
   margin-bottom: 1rem;
   color: var(--muted);
 }
 
-.mygpt-modal-title {
+.hermes-modal-title {
   font-family: var(--heading-font);
   font-size: 1.5rem;
   font-weight: 400;
@@ -1495,7 +1495,7 @@ footer.site-footer {
   letter-spacing: -0.02em;
 }
 
-.mygpt-modal-body {
+.hermes-modal-body {
   color: var(--muted);
   font-size: 1rem;
   line-height: 1.8;
@@ -1503,28 +1503,28 @@ footer.site-footer {
   text-align: left;
 }
 
-.mygpt-modal-body p {
+.hermes-modal-body p {
   margin: 0 0 1.25rem 0;
 }
 
-.mygpt-modal-body a {
+.hermes-modal-body a {
   color: var(--fg);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.mygpt-modal-body a:hover {
+.hermes-modal-body a:hover {
   opacity: 0.7;
 }
 
-.mygpt-modal-features {
+.hermes-modal-features {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
 }
 
-.mygpt-modal-feature {
+.hermes-modal-feature {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -1534,7 +1534,7 @@ footer.site-footer {
   box-sizing: border-box;
 }
 
-.mygpt-modal-feature-icon {
+.hermes-modal-feature-icon {
   width: 20px;
   height: 20px;
   min-width: 20px;
@@ -1547,7 +1547,7 @@ footer.site-footer {
   display: block;
 }
 
-.mygpt-modal-action {
+.hermes-modal-action {
   width: 100%;
   padding: 0.875rem 1.5rem;
   margin-top: 1.5rem;
@@ -1562,12 +1562,12 @@ footer.site-footer {
   transition: all 0.15s;
 }
 
-.mygpt-modal-action:hover {
+.hermes-modal-action:hover {
   opacity: 0.9;
   transform: translateY(-1px);
 }
 
-.mygpt-modal-action:active {
+.hermes-modal-action:active {
   transform: translateY(0);
 }
 
@@ -1593,7 +1593,7 @@ footer.site-footer {
 }
 
 /* User message - right aligned, subtle background */
-.mygpt-message--user {
+.hermes-message--user {
   align-items: flex-end;
 }
 
@@ -1611,7 +1611,7 @@ footer.site-footer {
 }
 
 /* AI message - left aligned, no background */
-.mygpt-message--assistant {
+.hermes-message--assistant {
   align-items: flex-start;
 }
 
@@ -1625,7 +1625,7 @@ footer.site-footer {
 }
 
 /* Error state */
-.mygpt-message--error .mygpt-message-text {
+.hermes-message--error .hermes-message-text {
   color: var(--muted);
 }
 
@@ -1657,22 +1657,22 @@ footer.site-footer {
   transition: all 0.15s;
 }
 
-.mygpt-message-copy:hover {
+.hermes-message-copy:hover {
   color: var(--fg);
   border-color: var(--fg);
 }
 
-.mygpt-message-copy svg {
+.hermes-message-copy svg {
   width: 14px;
   height: 14px;
 }
 
-.mygpt-message-copy--copied {
+.hermes-message-copy--copied {
   color: var(--fg) !important;
   border-color: var(--fg) !important;
-}
+} 
 
-.mygpt-message-tokens {
+.hermes-message-tokens {
   font-size: 0.6875rem;
   color: var(--muted);
   font-family: var(--mono-font);
@@ -1708,7 +1708,7 @@ footer.site-footer {
   flex-shrink: 0;
 }
 
-.mygpt-input-form {
+.hermes-input-form {
   display: flex;
   align-items: flex-end;
   gap: 0.75rem;
@@ -1767,19 +1767,19 @@ footer.site-footer {
   -webkit-tap-highlight-color: transparent;
 }
 
-.mygpt-clear:hover,
-.mygpt-send:hover {
+.hermes-clear:hover,
+.hermes-send:hover {
   color: var(--fg);
   border-color: var(--fg);
 }
 
-.mygpt-clear:active,
-.mygpt-send:active {
+.hermes-clear:active,
+.hermes-send:active {
   transform: scale(0.92);
 }
 
-.mygpt-clear:disabled,
-.mygpt-send:disabled {
+.hermes-clear:disabled,
+.hermes-send:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
@@ -1808,42 +1808,42 @@ footer.site-footer {
     z-index: 10;
   }
 
-  .mygpt-input {
+  .hermes-input {
     font-size: 16px; /* Prevent zoom on iOS */
     /* Prevent iOS from scrolling page on focus */
     touch-action: manipulation;
   }
 
-  .mygpt-user-bubble,
-  .mygpt-message-text {
+  .hermes-user-bubble,
+  .hermes-message-text {
     max-width: 90%;
   }
   
   /* Modal mobile styles */
-  .mygpt-modal {
+  .hermes-modal {
     width: calc(100% - 2rem);
     max-width: 100%;
   }
   
-  .mygpt-modal-content {
+  .hermes-modal-content {
     padding: 1.5rem;
     border-radius: 16px;
     max-width: 100%;
   }
   
-  .mygpt-modal-title {
+  .hermes-modal-title {
     font-size: 1.25rem;
   }
   
-  .mygpt-modal-body {
+  .hermes-modal-body {
     font-size: 0.875rem;
   }
   
-  .mygpt-modal-feature {
+  .hermes-modal-feature {
     font-size: 0.8125rem;
   }
   
-  .mygpt-modal-feature-icon {
+  .hermes-modal-feature-icon {
     width: 18px;
     height: 18px;
     min-width: 18px;
@@ -1853,14 +1853,14 @@ footer.site-footer {
   }
   
   /* Smaller buttons on mobile */
-  .mygpt-clear,
-  .mygpt-send {
+  .hermes-clear,
+  .hermes-send {
     width: 32px;
     height: 32px;
   }
   
-  .mygpt-clear svg,
-  .mygpt-send svg {
+  .hermes-clear svg,
+  .hermes-send svg {
     width: 16px;
     height: 16px;
   }
@@ -1875,7 +1875,7 @@ body.keyboard-open {
   left: 0;
 }
 
-body.keyboard-open .mygpt-container {
+body.keyboard-open .hermes-container {
   /* Height is set dynamically by JS using visualViewport */
   position: fixed;
   top: 0;
@@ -1883,18 +1883,18 @@ body.keyboard-open .mygpt-container {
   right: 0;
 }
 
-body.keyboard-open .mygpt-messages {
+body.keyboard-open .hermes-messages {
   /* Ensure messages don't get pushed up out of view */
   padding-top: calc(3rem + env(safe-area-inset-top));
 }
 
 /* Desktop */
 @media (min-width: 768px) {
-  .mygpt-messages {
+  .hermes-messages {
     padding: calc(5rem + env(safe-area-inset-top)) 2rem 2.5rem;
   }
 
-  .mygpt-input-wrapper {
+  .hermes-input-wrapper {
     padding: 1.25rem 2rem;
     padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
