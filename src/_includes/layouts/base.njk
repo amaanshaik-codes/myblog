@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    {% if layoutClass == 'is-mygpt-page' %}
+    {% if layoutClass == 'is-hermes-page' %}
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content" />
     {% else %}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -71,8 +71,8 @@
   <body class="{% if layoutClass %}{{ layoutClass }}{% endif %}{% if layout == 'layouts/post.njk' %} is-post-page{% endif %}">
     <a href="#content" class="skip-link">Skip to content</a>
 
-    {% if page.url and (page.url.substring(0,6) == '/blog/' or page.url == '/sys_link/' or page.url == '/mygpt/') %}
-      <a href="{% if page.url == '/blog/' or page.url == '/sys_link/' or page.url == '/mygpt/' %}/{% else %}/blog/{% endif %}" class="back-button" aria-label="Go back" title="(Back)">
+    {% if page.url and (page.url.substring(0,6) == '/blog/' or page.url == '/sys_link/' or page.url == '/hermes/') %}
+      <a href="{% if page.url == '/blog/' or page.url == '/sys_link/' or page.url == '/hermes/' %}/{% else %}/blog/{% endif %}" class="back-button" aria-label="Go back" title="(Back)">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <path d="M15 18l-6-6 6-6"/>
         </svg>

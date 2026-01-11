@@ -682,7 +682,7 @@ html[data-theme="dark"] .stamp-avatar {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   align-items: center;
 }
 
@@ -726,9 +726,9 @@ html.fonts-loaded .compile-text {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  max-width: 600px;
-  margin: 2.5rem auto 0;
-  padding: 0 1rem;
+  max-width: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
   flex-wrap: wrap;
 }
 
@@ -754,12 +754,13 @@ html.fonts-loaded .compile-text {
 }
 
 .bio-seg.highlight {
-  color: var(--fg);
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  /* Highlighting disabled */
+  color: inherit;
+  text-shadow: none;
 }
 
 html[data-theme="light"] .bio-seg.highlight {
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  text-shadow: none;
 }
 
 /* More clickable, non-circular listen control */
@@ -815,9 +816,9 @@ html[data-theme="light"] .listen-btn:hover {
 
 /* Recent posts on home */
 .recent-posts {
-  max-width: 600px;
-  margin: 2.5rem auto 0;
-  padding: 0 1rem;
+  max-width: none;
+  margin: 2rem 0 0;
+  padding: 0;
 }
 
 .recent-list {
@@ -1222,10 +1223,10 @@ footer.site-footer {
    MYGPT CHAT PAGE
    ============================================ */
 
-.is-mygpt-page .stamp-header,
-.is-mygpt-page .site-header,
-.is-mygpt-page .site-footer,
-.is-mygpt-page .skip-link {
+.is-hermes-page .stamp-header,
+.is-hermes-page .site-header,
+.is-hermes-page .site-footer,
+.is-hermes-page .skip-link {
   display: none !important;
 }
 
@@ -1290,11 +1291,11 @@ footer.site-footer {
 }
 
 /* ============================================
-   MYGPT PAGE STYLES - Minimalist Design
+   HERMES PAGE STYLES - Minimalist Design
    ============================================ */
 
 /* Container - Full viewport */
-.mygpt-container {
+.hermes-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -1309,7 +1310,7 @@ footer.site-footer {
 }
 
 /* Messages area */
-.mygpt-messages {
+.hermes-messages {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1391,7 +1392,7 @@ footer.site-footer {
   transform: scale(0.98);
 }
 
-.mygpt-info-link {
+.hermes-info-link {
   background: none;
   border: none;
   color: var(--muted);
@@ -1404,12 +1405,12 @@ footer.site-footer {
   transition: opacity 0.2s;
 }
 
-.mygpt-info-link:hover {
+.hermes-info-link:hover {
   opacity: 1;
 }
 
 /* Modal - Minimal */
-.mygpt-modal-overlay {
+.hermes-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
@@ -1421,12 +1422,12 @@ footer.site-footer {
   z-index: 998;
 }
 
-.mygpt-modal-overlay.mygpt-modal-active {
+.hermes-modal-overlay.hermes-modal-active {
   opacity: 1;
   pointer-events: auto;
 }
 
-.mygpt-modal {
+.hermes-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -1439,13 +1440,13 @@ footer.site-footer {
   max-width: 360px;
 }
 
-.mygpt-modal.mygpt-modal-active {
+.hermes-modal.hermes-modal-active {
   opacity: 1;
   pointer-events: auto;
   transform: translate(-50%, -50%);
 }
 
-.mygpt-modal-content {
+.hermes-modal-content {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -1457,7 +1458,7 @@ footer.site-footer {
   box-sizing: border-box;
 }
 
-.mygpt-modal-close {
+.hermes-modal-close {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -1571,7 +1572,7 @@ footer.site-footer {
 }
 
 /* Messages */
-.mygpt-message {
+.hermes-message {
   display: flex;
   flex-direction: column;
   max-width: 720px;
@@ -1596,7 +1597,7 @@ footer.site-footer {
   align-items: flex-end;
 }
 
-.mygpt-user-bubble {
+.hermes-user-bubble {
   display: inline-block;
   padding: 0.875rem 1.125rem;
   background: var(--code-bg);
@@ -1614,7 +1615,7 @@ footer.site-footer {
   align-items: flex-start;
 }
 
-.mygpt-message-text {
+.hermes-message-text {
   color: var(--fg);
   font-size: 0.9375rem;
   line-height: 1.8;
@@ -1629,7 +1630,7 @@ footer.site-footer {
 }
 
 /* Message actions - appear on hover */
-.mygpt-message-actions {
+.hermes-message-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -1638,11 +1639,11 @@ footer.site-footer {
   transition: opacity 0.15s;
 }
 
-.mygpt-message--assistant:hover .mygpt-message-actions {
+.hermes-message--assistant:hover .hermes-message-actions {
   opacity: 1;
 }
 
-.mygpt-message-copy {
+.hermes-message-copy {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1679,7 +1680,7 @@ footer.site-footer {
 }
 
 /* Thinking indicator */
-.mygpt-thinking {
+.hermes-thinking {
   font-size: 0.875rem;
   color: var(--muted);
   font-family: var(--mono-font);
@@ -1688,7 +1689,7 @@ footer.site-footer {
 }
 
 /* Disclaimer above input */
-.mygpt-disclaimer {
+.hermes-disclaimer {
   text-align: center;
   font-size: 0.75rem;
   color: var(--muted);
@@ -1699,7 +1700,7 @@ footer.site-footer {
 }
 
 /* Input wrapper - fixed bottom */
-.mygpt-input-wrapper {
+.hermes-input-wrapper {
   padding: 1rem 1.5rem;
   padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
   background: var(--bg);
@@ -1715,7 +1716,7 @@ footer.site-footer {
   margin: 0 auto;
 }
 
-.mygpt-input {
+.hermes-input {
   flex: 1;
   background: transparent;
   border: none;
@@ -1730,28 +1731,28 @@ footer.site-footer {
   -webkit-appearance: none;
 }
 
-.mygpt-input:focus {
+.hermes-input:focus {
   outline: none;
 }
 
-.mygpt-input::placeholder {
+.hermes-input::placeholder {
   color: var(--muted);
   opacity: 0.5;
 }
 
-.mygpt-input:disabled {
+.hermes-input:disabled {
   opacity: 0.4;
 }
 
-.mygpt-input-actions {
+.hermes-input-actions {
   display: flex;
   gap: 0.5rem;
   align-items: center;
   flex-shrink: 0;
 }
 
-.mygpt-clear,
-.mygpt-send {
+.hermes-clear,
+.hermes-send {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1785,21 +1786,21 @@ footer.site-footer {
 
 /* Mobile adjustments */
 @media (max-width: 640px) {
-  .mygpt-container {
+  .hermes-container {
     /* Use visual viewport for mobile keyboard handling */
     height: 100vh;
     height: 100dvh;
     height: -webkit-fill-available;
   }
 
-  .mygpt-messages {
+  .hermes-messages {
     padding: calc(3.5rem + env(safe-area-inset-top)) 1rem 1.5rem;
     gap: 2rem;
     /* Prevent overscroll bounce that can interfere with keyboard */
     overscroll-behavior: none;
   }
 
-  .mygpt-input-wrapper {
+  .hermes-input-wrapper {
     padding: 0.75rem 1rem;
     padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
     /* Ensure input stays above keyboard */

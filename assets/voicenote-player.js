@@ -12,20 +12,14 @@
   }
 
   function clearHighlights() {
+    // Highlighting disabled (timing drift looked bad). Ensure nothing remains highlighted.
     segs.forEach(function (s) { s.classList.remove('highlight'); });
-  }
-
-  function syncHighlights() {
-    var t = audio.currentTime || 0;
-    segs.forEach(function (s) {
-      var start = Number(s.getAttribute('data-start')) || 0;
-      var end = Number(s.getAttribute('data-end')) || 0;
-      var on = t >= start && t < end;
-      s.classList.toggle('highlight', on);
-    });
   }
   
   if (!btn || !audio) return;
+
+  // Make sure we never start in a highlighted state.
+  clearHighlights();
   
   btn.addEventListener('click', function() {
     if (audio.paused) {
@@ -34,16 +28,11 @@
         setPlayingUI(false);
       });
       setPlayingUI(true);
-      syncHighlights();
     } else {
       audio.pause();
       setPlayingUI(false);
       clearHighlights();
     }
-  });
-
-  audio.addEventListener('timeupdate', function () {
-    if (!audio.paused) syncHighlights();
   });
 
   audio.addEventListener('pause', function () {
