@@ -46,13 +46,20 @@ Tone: slightly quirky but restrained — not overly friendly. No emojis, no slan
     }
     
     function closeModal() {
+      // Restore focus before hiding to avoid setting aria-hidden while a descendant is focused
+      if (lastFocusedElement && lastFocusedElement !== document.body) {
+        lastFocusedElement.focus();
+      } else {
+        // If no stored element, ensure no focused descendant remains inside the modal
+        if (document.activeElement && modal.contains(document.activeElement)) {
+          document.activeElement.blur();
+        }
+      }
+
       overlay.classList.remove('hermes-modal-active');
       modal.classList.remove('hermes-modal-active');
       overlay.setAttribute('aria-hidden', 'true');
       modal.setAttribute('aria-hidden', 'true');
-      if (lastFocusedElement && lastFocusedElement !== document.body) {
-        lastFocusedElement.focus();
-      }
     }
     
     // ESC key handler
