@@ -35,8 +35,8 @@ async function gen() {
       ],
       start_url: "/",
       display: "standalone",
-      background_color: "#0f0f0f",
-      theme_color: "#0f0f0f"
+      background_color: "#000000",
+      theme_color: "#000000"
     };
 
     fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
